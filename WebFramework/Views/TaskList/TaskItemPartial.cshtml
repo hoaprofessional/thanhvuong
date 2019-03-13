@@ -1,0 +1,265 @@
+﻿@model WebFramework.Models.TaskManagement.TaskManagement.TaskItemPartialViewModel
+@{
+    var taskClass = "";
+    var staffClass = Model.IsPerformer ? "staff" : "";
+}
+@if (Model.IsNewTask)
+{
+    taskClass = "editing new-task";
+}
+<tr data-id="@Model.Task.Id" class="collection-item @taskClass @staffClass">
+    @if (Model.IsNewTask || Model.IsPerformer || Model.IsAssigner || Model.CanCreateTask)
+    {
+        <td class="center action">
+
+            <a class="orange-text tooltipped edit-row edit-button" data-position="top" data-delay="50" data-tooltip="Chỉnh sửa">
+                <i class="material-icons">mode_edit</i>
+            </a>
+            <a class="green-text tooltipped save-row save-task" data-position="top" data-delay="50" data-tooltip="Lưu">
+                <i class="material-icons">done</i>
+            </a>
+            <a class="red-text tooltipped save-row cancel-task" data-position="top" data-delay="50" data-tooltip="Hủy">
+                <i class="material-icons">highlight_off</i>
+            </a>
+            @if(!Model.IsPerformer)
+            {
+            <a href="#" class="red-text delete-button tooltipped edit-row delete-row" data-position="top" data-delay="50" data-tooltip="Xóa">
+                <i class="material-icons">delete_forever</i>
+            </a>
+            }
+        </td>
+    }
+    else
+    {
+        <td></td>
+    }
+    <td class="center">
+        @if (!Model.IsNewTask)
+        {
+            <span class="row-display @staffClass"
+                  data-value="@Model.Task.Name">
+                @Model.Task.Name
+            </span>
+        }
+
+        <input name="Name"
+               class="row-edit manager"
+               value="@Model.Task.Name"
+               type="text" />
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            <span data-value="@Model.Task.DateReception"
+                  class="date-display">
+                @Model.Task.DateReception.ToString("dd/MM/yyyy")
+            </span>
+            @*<input value="@Model.Task.DateReception"
+                data-value="@Model.Task.DateReception.ToString("dd/MM/yyyy")"
+                class="row-edit datepicker"
+                name="DateReception" />*@
+        }
+        else
+        {
+            <span>@DateTime.Today.ToString("dd/MM/yyyy")</span>
+        }
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            <span data-value="@Model.Task.Deadline"
+                  class="row-display date-display @staffClass">
+                @Model.Task.Deadline.ToString("dd/MM/yyyy")
+            </span>
+            <input value="@Model.Task.Deadline.ToString("dd/MM/yyyy")"
+                   data-value="@Model.Task.Deadline.ToString("dd/MM/yyyy")"
+                   class="row-edit datepicker manager"
+                   name="Deadline" />
+        }
+        else
+        {
+            <input value="@DateTime.Today.ToString("dd/MM/yyyy")"
+                   data-value="@DateTime.Today.ToString("dd/MM/yyyy")"
+                   class="row-edit datepicker manager"
+                   name="Deadline" />
+        }
+
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            if (Model.Task.FinishDate != null)
+            {
+                <span data-value="@Model.Task.FinishDate"
+                      class="row-display date-display @staffClass">
+                    @Model.Task.FinishDate.Value.ToString("dd/MM/yyyy")
+                </span>
+            }
+            else
+            {
+                <span>Chưa hoàn thành</span>
+            }
+
+            @*<input value="@Model.Task.FinishDate.ToString("dd/MM/yyyy")"
+                data-value="@Model.Task.FinishDate.ToString("dd/MM/yyyy")"
+                class="row-edit datepicker"
+                name="FinishDate" />*@
+        }
+        else
+        {
+            <span>Chưa hoàn thành</span>
+            @*<input value="@DateTime.Today.ToString("dd/MM/yyyy")"
+                data-value="@DateTime.Today"
+                class="row-edit datepicker"
+                name="FinishDate" />*@
+        }
+
+    </td>
+    <td class="parent">
+        @if (!Model.IsNewTask)
+        {
+            <span>
+                @Model.Task.Assigner.Name
+            </span>
+        }
+        else
+        {
+            <span>
+                @Model.CurrentUserName
+            </span>
+
+        }
+    </td>
+    <td class="parent">
+        @if (!Model.IsNewTask)
+        {
+            <span class="row-display @staffClass">
+                @Model.Task.AssignTo.Name
+            </span>
+        }
+        <select name="AssignToId"
+                class="row-edit manager">
+            @if (Model.IsNewTask)
+            {
+                <option selected value="">
+                    Chọn
+                </option>
+            }
+            @foreach (var user in Model.AssignToUsers)
+            {
+                if (!Model.IsNewTask && user.Id == @Model.Task.AssignToId)
+                {
+                    <option selected value="@user.Id">
+                        @user.Name
+                    </option>
+                }
+                else
+                {
+                    <option value="@user.Id">
+                        @user.Name
+                    </option>
+                }
+            }
+        </select>
+    </td>
+    <td class="parent">
+        @if (!Model.IsNewTask)
+        {
+            <span style="background: @Model.Task.Priority.Color!important"
+                  data-value="@Model.Task.PriorityId"
+                  class="priority row-display child new badge red lighten-1 gradient-shadow @staffClass"
+                  data-badge-caption="">
+                @Model.Task.Priority.Name
+            </span>
+        }
+        <select name="PriorityId"
+                class="row-edit manager">
+            @if (Model.IsNewTask)
+            {
+                <option selected value="">
+                    Chọn
+                </option>
+            }
+            @foreach (var priority in Model.Priorities)
+            {
+                if (!Model.IsNewTask && priority.Id == Model.Task.Priority.Id)
+                {
+                    <option selected value="@priority.Id">
+                        @priority.Name
+                    </option>
+                }
+                else
+                {
+                    <option value="@priority.Id">
+                        @priority.Name
+                    </option>
+                }
+            }
+        </select>
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            <span data-value="@Model.Task.TaskStatusId"
+                  class="row-display">
+                @Model.Task.TaskStatus.Decription
+            </span>
+            <select name="TaskStatusId"
+                    class="row-edit manager staff">
+                @foreach (var taskStatus in Model.TaskStatuss)
+                {
+                    if (taskStatus.Id == Model.Task.TaskStatusId)
+                    {
+                        <option selected value="@taskStatus.Id">
+                            @taskStatus.Decription
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@taskStatus.Id">
+                            @taskStatus.Decription
+                        </option>
+                    }
+                }
+            </select>
+        }
+        else
+        {
+            <span>Vừa được tạo</span>
+        }
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            <span data-value="@Model.Task.Result"
+                  class="row-display ">
+                @Model.Task.Result
+            </span>
+            <textarea name="Result" class="row-edit manager staff">@Model.Task.Result</textarea>
+        }
+        else
+        {
+            <span>Chưa có kết quả</span>
+        }
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            <span data-value="@Model.Task.Note"
+                  class="row-display ">
+                @Model.Task.Note
+            </span>
+            <textarea name="Note" class="row-edit manager staff">@Model.Task.Note</textarea>
+        }
+        else
+        {
+            <textarea name="Note" class="row-edit manager">@Model.Task.Note</textarea>
+        }
+    </td>
+    <td>
+        @if (!Model.IsNewTask)
+        {
+            @Model.Task.ModifiedTime.Value.ToString("dd/MM/yyyy")
+        }
+    </td>
+</tr>

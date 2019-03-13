@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@model WebFramework.Areas.Management.Models.UserRoleViewModel
+
+
+@foreach (var item in Model.Users)
+{
+    <div style="display:flex">
+        <p>@item.Name</p>
+        @foreach (var role in Model.Roles)
+        {
+            <label>@role.Name</label>
+            if (item.Roles.Contains(role.Name))
+            {
+                <input class="role-checked" type="checkbox" data-user-id="@item.Id" name="@role.Name" checked />
+            }
+            else
+            {
+                <input class="role-checked" type="checkbox" data-user-id="@item.Id" name="@role.Name" />
+            }
+        }
+    </div>
+}
+
+@section scripts{ 
+    <script src="~/areas/management/user_roles_management.js" asp-append-version="true"></script>
+}

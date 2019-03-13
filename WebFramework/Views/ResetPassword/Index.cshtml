@@ -1,0 +1,37 @@
+﻿@model WebFramework.Models.ResetPassword.ResetPasswordViewModel
+<style>
+    .invoice-header form {
+        width: 60%;
+        margin: auto;
+        padding-top: 103px;
+    }
+</style>
+<div class="container">
+    <div id="invoice">
+        <div class="invoice-header">
+            <form method="post"
+                  asp-action="Index">
+                <div class="col-md-12">
+                    <div class="form-group bmd-form-group">
+                        <label class="bmd-label-floating" asp-for="Password">Mật khẩu</label>
+                        <input language-support="true" class="form-control" asp-for="Password" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group bmd-form-group">
+                        <label class="bmd-label-floating" asp-for="ConfirmPassword">Nhập lại mật khẩu</label>
+                        <input language-support="true" class="form-control" asp-for="ConfirmPassword" required type="password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group bmd-form-group">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@Html.Partial("_ValidationScriptsPartial")

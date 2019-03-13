@@ -1,0 +1,231 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.ProfileViewModels.ProfileIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<aside id="right-sidebar-nav">
+    <ul id="chat-out" class="side-nav rightside-navigation">
+        <li class="li-hover">
+            <div class="row">
+                <div class="col s12 border-bottom-1 mt-5">
+                    <ul class="tabs">
+                        <li class="tab col s4">
+                            <a href="#all" class="active">
+                                <span class="material-icons">dashboard</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#undone">
+                                <span class="material-icons">highlight_off</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#done">
+                                <span class="material-icons">check_circle</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="all" class="col s12">
+                    <div class="flex align justify">
+                        <h6 class="mt-5 mb-3 ml-3">Toàn bộ công việc</h6>
+                        <a href="works.html" class="flex align justify">
+                            <i class="material-icons">more_horiz</i>
+                        </a>
+                    </div>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="undone" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc chưa hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="done" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc đã hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</aside>
+<!-- END RIGHT SIDEBAR NAV-->
+
+
+
+<div class="container">
+    <div id="profile-page" class="section">
+        <div id="profile-page-header" class="card">
+            <div class="card-image waves-effect waves-block waves-light gradient-45deg-blue-grey-blue-grey">
+            </div>
+            <figure class="card-profile-image">
+                @if (String.IsNullOrEmpty(Model.User.Avatar))
+                {
+                    <img src="/images/avatar/avatar-7.png" alt="profile image" class="circle z-depth-2 responsive-img activator gradient-45deg-light-blue-cyan gradient-shadow">
+                }
+                else
+                {
+                    <img src="@Model.User.Avatar" alt="profile image" class="circle z-depth-2 responsive-img activator gradient-45deg-light-blue-cyan gradient-shadow">
+                }
+            </figure>
+            <div class="card-content">
+                <div class="row pt-2">
+                    <div class="col s12 m3 offset-m2">
+                        <h4 class="card-title grey-text text-darken-4">@Model.User.Name</h4>
+                        <p class="medium-small grey-text">@Model.User.Carrer</p>
+                    </div>
+                </div>
+                @if (@Model.HasPermission(PermissionValue.RegisterUser))
+                {
+                    <a href="/RegisterAccount" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                        <i class="material-icons right">perm_identity</i> Đăng ký user
+                    </a>
+                    <a href="/Management/Product" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                        <i class="material-icons right">perm_identity</i> Quản trị hệ thống
+                    </a>
+                }
+                <a href="/ResetPassword" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                    <i class="material-icons right">perm_identity</i> Đổi mật khẩu
+                </a>
+            </div>
+            <div class="card-reveal">
+                <p>
+                    <span class="card-title grey-text text-darken-4">
+                        Tín Võ
+                        <i class="material-icons right">close</i>
+                    </span>
+                </p>
+                <p>
+                    <span>
+                        <i class="material-icons cyan-text text-darken-2">perm_identity</i>Trưởng phòng Sale
+                    </span>
+                </p>
+                <p>
+                    <i class="material-icons cyan-text text-darken-2">perm_phone_msg</i> +84 123 456 7890
+                </p>
+                <p>
+                    <i class="material-icons cyan-text text-darken-2">email</i> mail@domain.com
+                </p>
+                <p>
+                    <i class="material-icons cyan-text text-darken-2">cake</i> 18th June 1990
+                </p>
+                <p>
+                    <i class="material-icons cyan-text text-darken-2">airplanemode_active</i> Nha Trang
+                </p>
+            </div>
+        </div>
+
+        <div id="profile-page-content" class="row flex flex-column-res">
+            <div class="col s12 m4">
+                <div class="card gradient-45deg-deep-orange-orange gradient-shadow same-height">
+                    <div class="card-content white-text right-align pr-0">
+                        <span class="card-title position-absolute">Công việc</span>
+                        <i class="material-icons">mail_outline</i>
+                    </div>
+                    <div class="card-action pt-0">
+                        <div class="chip">
+                            <a href="words.html">
+                                Tất cả
+                            </a>
+                        </div>
+                        <div class="chip">
+                            <a href="words.html">
+                                Chưa hoàn thành
+                            </a>
+                        </div>
+                        <div class="chip">
+                            <a href="words.html">
+                                Đã hoàn thành
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card gradient-45deg-purple-deep-orange gradient-shadow same-height">
+                    <div class="card-content white-text right-align pr-0">
+                        <span class="card-title position-absolute">Báo giá</span>
+                        <i class="material-icons">chrome_reader_mode</i>
+                    </div>
+                    <div class="card-action pt-0">
+                        <div class="chip">
+                            <a href="billnew.html">
+                                Tạo mới
+                            </a>
+                        </div>
+                        <div class="chip">
+                            <a href="billAll.html">
+                                Tất cả hóa đơn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card gradient-45deg-purple-deep-purple gradient-shadow same-height">
+                    <div class="card-content white-text right-align pr-0">
+                        <span class="card-title position-absolute">Thống kê</span>
+                        <i class="material-icons">pie_chart_outlined</i>
+                    </div>
+                    <div class="card-action pt-0">
+                        <div class="chip">
+                            <a href="#">
+                                Biểu đồ 1
+                            </a>
+                        </div>
+                        <div class="chip">
+                            <a href="#">
+                                Biểu đồ 2
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

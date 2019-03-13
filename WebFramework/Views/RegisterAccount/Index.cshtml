@@ -1,0 +1,154 @@
+﻿@model WebFramework.Models.UserLoginViewModel.RegisterAccountViewModel.RegisterAccountIndexViewModel
+
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row section flex align">
+            <div class="col s10 m6 l6">
+                <h5>Thêm mới user</h5>
+            </div>
+            <div class="col s2 m6 l6">
+                <a class="waves-effect waves-light btn gradient-45deg-light-blue-cyan right" id="submit-form">
+                    <i class="material-icons right">save</i> LƯU
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="section">
+        <div class="row flex flex-column-res">
+            <div class="card-image width-65 col s12 m12 l6">
+                <input type="file" id="input-file-events" class="dropify-event" data-max-file-size="2M" data-disable-remove="true" />
+            </div>
+            <div class="col s12 m12 l6">
+                <div class="row">
+                    <form class="col s12" method="post" id="formValidate">
+                        <div class="row" id="inp-avatar" hidden>
+                            <div class="input-field col s12">
+                                <input name="Avatar" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="UserName" required data-error=".errorTxt1" />
+                                <label asp-for="UserName" class="center-align"></label>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                                <div class="errorTxt1"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="Name" required data-error=".errorTxt1" />
+                                <label asp-for="Name" class="center-align"></label>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                                <div class="errorTxt1"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="Address" required data-error=".errorTxt1" />
+                                <label asp-for="Address" class="center-align"></label>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                                <div class="errorTxt2"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="PhoneNumber" required data-error=".errorTxt1" />
+                                <label asp-for="PhoneNumber" class="center-align"></label>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <div class="errorTxt3"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="IdentityCardNumber" required type="number" data-error=".errorTxt1" />
+                                <label asp-for="IdentityCardNumber" class="center-align"></label>
+                                <span asp-validation-for="IdentityCardNumber" class="text-danger"></span>
+                                <div class="errorTxt3"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="Email" required data-error=".errorTxt1" />
+                                <label asp-for="Email" class="center-align"></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <div class="errorTxt4"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="Password" required data-error=".errorTxt1" />
+                                <label asp-for="Password" class="center-align"></label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <div class="errorTxt4"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input asp-for="ConfirmPassword" required data-error=".errorTxt1" />
+                                <label asp-for="ConfirmPassword" class="center-align"></label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                <div class="errorTxt4"></div>
+                            </div>
+                        </div>
+
+                        <div class="user-objects">
+                            <p>Đối tượng</p>
+                            @foreach (var userObject in Model.UserObjectDtos)
+                            {
+                                <div class="input-field col s6">
+                                    <input class="filled-in" id="@userObject.Id" value="@userObject.Id" name="ObjectId" type="radio" />
+                                    <label for="@userObject.Id" class="center-align">@userObject.Name</label>
+                                    <div class="errorTxt4"></div>
+                                </div>
+                            }
+                        </div>
+                        <input id="submit" type="submit" style="display: none;">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+        span.text-danger.field-validation-error {
+            margin-left: 0px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        $($('.user-objects input')[0]).prop('checked', true);
+        $('#submit-form').click(function () {
+
+            uploadFile('#input-file-events', '/UploadFile/UploadFile', function (data) {
+                if (data != "fail") {
+                    $('#inp-avatar input').val(data);
+                }
+                else {
+                    $('#inp-avatar input').val('');
+                }
+
+                $.post('/RegisterAccount/Register', $('#formValidate').serialize(), function (result) {
+                    if (result.result == 'success') {
+                        success('Tạo tài khoản thành công!');
+                    }
+                    else {
+                        $.each(result.data, function (key, val) {
+                            $('input[name="' + val.key + '"]').parent().find('span.text-danger.field-validation-error').remove();
+                            $('input[name="' + val.key + '"]').parent().append('<span class="text-danger field-validation-error">\
+            '+ val.value.errorMessage + ' \
+            </span>');
+                            $('input[name="' + val.key + '"]').addClass('input-validation-error');
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

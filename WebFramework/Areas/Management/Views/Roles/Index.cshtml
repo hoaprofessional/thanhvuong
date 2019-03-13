@@ -1,0 +1,37 @@
+﻿@model WebFramework.Areas.Management.Models.RolesViewModel;
+@{
+}
+
+
+
+<form id="add-role-form">
+    <input type="text" />
+    <input type="submit" value="Add" />
+</form>
+
+<div id="roles">
+    @foreach (var role in Model.Roles)
+    {
+        <div style="display:flex;">
+            <p data-id="@role.Id" class="role-name">@role</p>
+            <button class="delete-role" data-id="@role.Id">Delete</button>
+        </div>
+    }
+</div>
+
+<div id="update-popup" hidden>
+    <form id="update-role-form">
+        <input class="update-popup-input" value="" />
+        <input type="submit" value="Update" />
+    </form>
+</div>
+
+@section scripts{
+    <environment include="Development">
+        <script src="~/areas/management/roles_management.js" asp-append-version="true"></script>
+    </environment>
+}
+
+
+
+

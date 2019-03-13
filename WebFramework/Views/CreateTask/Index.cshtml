@@ -1,0 +1,190 @@
+﻿@model WebFramework.Models.TaskManagement.TaskManagement.CreateTaskViewModel
+<div class="container">
+    <div class="section">
+        <div class="col s12">
+            <ul id="task-card" class="collection with-header">
+                <li class="collection-header gradient-45deg-light-blue-cyan">
+                    <div class="row flex align">
+                        <div class="col s10 m6 l6">
+                            <h4 class="task-card-title">Thêm task</h4>
+                            <p class="task-card-date">@DateTime.Today.ToString("dd/MM/yyyy")</p>
+                        </div>
+
+                        <div class="col s10 m6 l6">
+                            <h4 class="task-card-title">Tên công việc</h4>
+                            <p class="task-card-date">@Model.Work.Name</p>
+                        </div>
+
+                        <div class="col s2 m6 l6">
+                            <a onclick="submit()" class="btn-flat waves-effect white-text right">
+                                <i class="material-icons right">save</i> LƯU
+                            </a>
+                            <a href="/WorkList" class="btn-flat waves-effect white-text right">
+                                <i class="material-icons right">cancel</i> HỦY
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="collection-header hide-filter">
+                    <div class="invoice-table">
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <table class="striped float" id="mainTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="button">
+                                                <a class="waves-effect waves-light btn gradient-45deg-green-teal" onclick="addRow()">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </th>
+                                            <th>Tên Task</th>
+                                            <th>Ngày bắt đầu</th>
+                                            <th>Mức độ ưu tiên</th>
+                                            <th>Người thực hiện task</th>
+                                            <th>Deadline</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="error-row template-row">
+                                            <td class="center action">
+                                                <a class="red-text tooltipped modal-trigger remove-work" data-position="top" data-delay="50" data-tooltip="Xóa công việc">
+                                                    <i class="material-icons">clear</i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="work" name="work">
+                                            </td>
+                                            <td>
+                                                <select>
+                                                    <option value="" disabled="" selected="">Chọn mức độ</option>
+                                                    <option value="1">Cao</option>
+                                                    <option value="2">Trung bình</option>
+                                                    <option value="3">Thấp</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select>
+                                                    <option value="" disabled="" selected="">Chọn mức độ</option>
+                                                    <option value="1">Văn Hùng</option>
+                                                    <option value="2">Văn Thịnh</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input id="date" type="text" class="datepicker">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+        tr.error {
+            border: solid 1px #ff8181;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+
+    $(document).ready(() => {
+        $("#mainTable").delegate(".remove-work", "click", function () {
+            $(this).closest('tr').remove();
+        });
+    });
+
+    function addRow() {
+        var table = document.getElementById("mainTable");
+        // var row = table.insertRow(1);
+        var row = table.insertRow();
+        row.className = "input-row";
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        cell1.innerHTML = "<a class='red-text tooltipped modal-trigger remove-work' data-position='top' data-delay='50' data-tooltip='Xóa công việc'><i class='material-icons'>clear</i></a>";
+        cell1.className = "center action";
+        cell2.innerHTML = "<input type='text' id='work' name='Name'>";
+        cell3.innerHTML = "<input type='text' id='dateBegin' name='DateBegin' class='datepicker'>";
+        cell4.innerHTML = "<select name='PriorityId'>"+
+                            "<option value='' disabled selected>Chọn mức độ</option>"
+            @foreach(var priority in Model.Priorities)
+            {
+                @Html.Raw(" +\"<option value = '"+priority.Id+"' > "+priority.Name+" </option> \"");
+
+            }
+                            +"</select>";
+        cell5.innerHTML = "<select name='PriorityId'>"+
+                            "<option value='' disabled selected>Chọn người thực hiện task</option>"
+            @foreach(var assignUser in Model.AssignUsers)
+            {
+                @Html.Raw(" +\"<option value = '"+ assignUser.Id+"' > "+ assignUser.Name+ " ("+ assignUser.UserName +") " + " </option> \"");
+
+            }
+                            +"</select>";
+        cell6.innerHTML = "<input id='date' name='TimeExpired' type='text' class='datepicker'>";
+        initInput();
+    }
+
+    function submit() {
+        var data = [];
+        var dataCount = 0;
+        $('#mainTable tr.error').removeClass('error');
+
+        var cancel = false;
+
+        $('#mainTable tr.input-row').each(function () {
+            var work = {};
+            $(this).find('input,select').each(function () {
+                var name = $(this).attr('name');
+                var value = $(this).val();
+                if (value == null || value == '') {
+                    $(this).closest('tr.input-row').addClass('error');
+                    cancel = true;
+                    return;
+                }
+                if (name != null) {
+                    work[name] = value;
+                }
+            });
+            data[dataCount++] = work;
+        });
+
+        if (cancel)
+            return;
+        var index=0;
+        $.each(data, function (key, val) {
+            if (new Date(val.TimeExpired) < new Date()) {
+                $($('#mainTable tr.input-row')[index]).addClass('error');
+                cancel = true;
+                return;
+            }
+            index++;
+        });
+
+        if (cancel)
+            return;
+
+        $.post('/CreateWork/SubmitAddWork', { Works : data }, function (response) {
+            if (response.result == "success") {
+                swal("Thành công", "Bạn đã thực hiện thành công!", "success");
+            }
+            else {
+                swal("Thất bại", "Đã có lỗi xảy ra!", "error");
+            }
+        });
+
+    }
+
+    </script>
+}
+

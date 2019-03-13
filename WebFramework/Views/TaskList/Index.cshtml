@@ -1,0 +1,341 @@
+﻿@model WebFramework.Models.TaskManagement.TaskManagement.TaskListIndexViewModel
+@using Framework.Utils
+<style>
+    #tasks td.action .save-row {
+        display: none;
+    }
+
+    #tasks td.action a {
+        cursor: pointer;
+    }
+
+    #tasks tr.editing td.action .save-row {
+        display: initial;
+    }
+
+    #tasks tr.editing .row-display {
+        display: none;
+    }
+
+    #tasks tr.editing.staff .row-display.staff {
+        display: initial;
+    }
+
+    #tasks tr.editing .edit-row {
+        display: none;
+    }
+
+
+    #tasks .row-edit {
+        display: none;
+    }
+
+    #tasks tr.editing .row-edit {
+        display: block;
+    }
+
+    #tasks tr.editing.staff .row-edit.manager {
+        display: none;
+    }
+
+    #tasks tr.editing.staff .row-edit.staff {
+        display: block;
+    }
+
+    .dropdown-content.select-dropdown {
+        display: none !important;
+    }
+
+    input.select-dropdown, .select-wrapper span.caret {
+        display: none !important;
+    }
+
+    /*input.row-edit:focus, .editing .select-wrapper.row-edit:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    input.row-edit, .editing .select-wrapper.row-edit {
+        border: solid 1px #c0c2cc !important;
+        border-radius: 5px !important;
+        padding-left: 10px !important;
+        outline: none;
+    }*/
+</style>
+
+<span id="work-id" style="display:none" data-work-id="@Model.Work.Id">
+
+</span>
+
+
+<select id="priority-color" style="display:none!important">
+    @foreach (var priority in Model.Priorities)
+    {
+        <option data-name="@priority.Name"
+                data-id="@priority.Id"
+                data-color="@priority.Color"></option>
+    }
+</select>
+<section id="content">
+    <div class="container">
+        <div class="section">
+            <div class="col s12">
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-header gradient-45deg-light-blue-cyan">
+                        <div class="row flex align">
+                            <div class="col s10 m6 l6">
+                                <h4 class="task-card-title">Task</h4>
+                                <p class="task-card-date">@DateTime.Today.ToString("dd/MM/yyyy")</p>
+                            </div>
+                            <div class="col s2 m6 l6">
+                                <h4 class="task-card-title">@Model.Work.Name</h4>
+                            </div>
+                            @if (Model.CanCreateTask)
+                            {
+                                <a href="#" id="create-task" class="btn-flat waves-effect white-text right">
+                                    <i class="material-icons right">add</i> THÊM MỚI
+                                </a>
+                            }
+                        </div>
+                    </li>
+                    <li id="table-space" class="collection-header task">
+                        <table id="tasks" class="responsive-table dataTable display highlight" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="action">Hành động</th>
+                                    <th name="Name">
+                                        Nội dung
+                                    </th>
+                                    <th name="DateBegin">
+                                        Ngày giao việc
+                                    </th>
+                                    <th name="Deadline">
+                                        Deadline
+                                    </th>
+                                    <th name="FinishDate">
+                                        Ngày hoàn thành
+                                    </th>
+                                    <th name="AssignerId">
+                                        Người giao
+                                    </th>
+                                    <th name="AssignToId">
+                                        Người thực hiện
+                                    </th>
+                                    <th name="PriorityId">
+                                        Ưu tiên
+                                    </th>
+                                    <th name="TaskStatusId">
+                                        Trạng thái
+                                    </th>
+                                    <th name="Result">
+                                        Kết quả
+                                    </th>
+                                    <th name="Note">
+                                        Ghi chú
+                                    </th>
+                                    <th name="ModifiedTime">
+                                        Chỉnh sửa lần cuối
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var task in Model.Work.Tasks)
+                                {
+                                    var taskStatuss = Model.TaskStatuss.Clone();
+                                    var isPerformer = task.AssignTo.Id == Model.CurrentUserId;
+
+                                    Html.RenderPartial("~/Views/TaskList/TaskItemPartial.cshtml",
+                                        new WebFramework.Models.TaskManagement.TaskManagement.TaskItemPartialViewModel()
+                                        {
+                                            Task = task,
+                                            AssignToUsers = Model.AssignToUsers,
+                                            CanCreateTask = Model.CanCreateTask,
+                                            CurrentUserId = Model.CurrentUserId,
+                                            Priorities = Model.Priorities,
+                                            TaskStatuss = taskStatuss,
+                                            IsAssigner = Model.CanCreateTask,
+                                            IsPerformer = isPerformer
+                                        });
+                                }
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="modalfix" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4>Danh sách task</h4>
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-item">
+                        <input type="checkbox" id="task1" />
+                        <label for="task1">
+                            Check the new Mockup of ABC.
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat green lighten-1 gradient-shadow">Thấp</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat yellow darken-3 gradient-shadow">Trung bình</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat red lighten-1 gradient-shadow">Cao</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section scripts{
+
+
+
+
+    @if (Model.CanCreateTask)
+    {
+        <script>
+            $('#create-task').click(function () {
+                var newRow = $('#new-row').clone()[0];
+                $(newRow).css('display', '');
+                $.get('/TaskList/TaskItemPartial?taskId=0', function (response) {
+                    $('#tasks>tbody').append(response);
+                    resetDatePicker();
+                });
+            });
+        </script>
+    }
+    <script>
+        resetDatePicker();
+        $('body').delegate('.edit-button', 'click', function () {
+            $(this).closest('tr').addClass('editing');
+        });
+
+        $('body').delegate('.cancel-task', 'click', function () {
+            var trElem = $(this).closest('tr');
+            if (trElem.hasClass('new-task')) {
+                $(this).closest('tr').remove();
+            }
+            else {
+                trElem.removeClass('editing');
+                trElem.find('.row-edit').each(function () {
+                    $(this).val($(this).closest('td').find('.row-display').attr('data-value'));
+                });
+
+            }
+        });
+
+        function resetInput(trElem) {
+            trElem.find('.row-edit').each(function () {
+                $(this).val($(this).closest('td').find('.row-display').attr('data-value'));
+            });
+
+            //$('select.row-edit').material_select();
+
+        }
+
+        $('body').delegate('.cancel-task', 'click', function () {
+            var trElem = $(this).closest('tr');
+            trElem.removeClass('editing');
+            resetInput(trElem);
+        });
+
+        $('body').delegate('.delete-row', 'click', function () {
+            var trElem = $(this).closest('tr');
+            $.post('/TaskList/DeleteTask?taskId=' + trElem.attr('data-id'), function (response) {
+                if (response.result == "success") {
+                    trElem.remove();
+                }
+                else {
+                    error(result.message);
+                }
+            });
+        });
+
+
+
+        $('body').delegate('.save-task', 'click', function () {
+            var trElem = $(this).closest('tr');
+            var trIndex = trElem.index();
+
+            var newTask = {};
+            trElem.find('.row-edit').each(function () {
+                if ($(this).hasClass('datepicker')) {
+                    var temp = $(this).val();
+                    var day = temp.substr(0, temp.indexOf('/'));
+                    temp = temp.replace(day + '/', '');
+                    var month = temp.substr(0, temp.indexOf('/'));
+                    temp = temp.replace(month + '/', '');
+                    var year = temp;
+                    newTask[$(this).attr('name')] = year + '/' + month + '/' + day;
+                }
+                else {
+                    newTask[$(this).attr('name')] = $(this).val();
+                }
+            });
+            newTask.WorkId = $('#work-id').attr('data-work-id');
+
+            if (trElem.hasClass('new-task')) {
+                /* thêm mới */
+                $.post('/TaskList/AddNewtask', newTask).done(function (response) {
+                    if (response.result == "success") {
+                        success("Thành công");
+                        $.get('/TaskList/TaskItemPartial?taskId=' + response.data, function (html) {
+                            trElem.remove();
+                            $('#tasks>tbody').insertAt(trIndex, html);
+                            resetDatePicker();
+                        });
+                    }
+                    else {
+                        error(response.message);
+                    }
+                }).fail(function (response) {
+                    error('Có vấn đề về đường truyền');
+                });
+            }
+            else {
+                //cập nhật
+                newTask.Id = trElem.attr('data-id');
+                var link = '/TaskList/UpdateTask';
+                if (trElem.hasClass('staff')) {
+                    link = '/TaskList/StaffUpdateTask';
+                }
+                $.post(link, newTask).done(function (response) {
+                    if (response.result == "success") {
+                        success("Thành công");
+                        $.get('/TaskList/TaskItemPartial?taskId=' + response.data, function (html) {
+                            trElem.remove();
+                            $('#tasks>tbody').insertAt(trIndex, html);
+                            resetDatePicker();
+                        });
+                    }
+                    else {
+                        error(response.message);
+                    }
+                }).fail(function (response) {
+                    error('Có vấn đề về đường truyền');
+                });
+            }
+            
+        });
+
+    </script>
+}

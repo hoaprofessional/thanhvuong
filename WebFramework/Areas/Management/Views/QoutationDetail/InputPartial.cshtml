@@ -1,0 +1,77 @@
+﻿@model Framework.Services.Admins.QoutationDetails.Dto.QoutationDetailInput
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Thông tin người dùng</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="card-body">
+            <form data-noreload="true"
+                  data-on-submit-done="onInputSubmitDone"
+                  data-on-submit-fail="onInputSubmitFail"
+                  method="post"
+                  asp-action="InputPartial"
+                  id="saveInputForm">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group bmd-form-group">
+                            <input asp-for="Id" type="hidden" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group bmd-form-group">
+                            <label class="bmd-label-floating" asp-for="ProductQuantity">Số lượng sản phẩm</label>
+                            <input language-support="true" class="form-control" asp-for="ProductQuantity" required type="text" />
+                            <span asp-validation-for="ProductQuantity"></span>
+                        </div>
+                    </div>
+                    <div style="padding-left:0px;padding-right:0px;" class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label class="bmd-label-floating" asp-for="UnitPriceBuy">Đơn giá nhập</label>
+                                <input language-support="true" class="form-control" asp-for="UnitPriceBuy" type="text" />
+                                <span asp-validation-for="UnitPriceBuy"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label class="bmd-label-floating" asp-for="VATBuy">VAT nhập</label>
+                                <input language-support="true" class="form-control" asp-for="VATBuy" type="text" />
+                                <span asp-validation-for="VATBuy"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding-left:0px;padding-right:0px;" class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label class="bmd-label-floating" asp-for="UnitPriceSell">Đơn giá bán</label>
+                                <input language-support="true" class="form-control" asp-for="UnitPriceSell" type="text" />
+                                <span asp-validation-for="UnitPriceSell"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label class="bmd-label-floating" asp-for="VATSell">VAT bán</label>
+                                <input language-support="true" class="form-control" asp-for="VATSell" type="text" />
+                                <span asp-validation-for="VATSell"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" hidden></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            <button type="button" onclick="$('#saveInputForm').submit()" class="btn btn-primary">Lưu</button>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Areas/Management/Views/Shared/_ValidationScriptsPartial.cshtml")
+<script>
+</script>

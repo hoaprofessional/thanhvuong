@@ -1,0 +1,117 @@
+﻿@model WebCore.Utils.ModelHelper.PagingResultDto<Framework.Models.QoutationManagement.OrderDetail>
+<div class="table-responsive">
+    <table class="table">
+        <thead class=" text-primary">
+            <tr>
+                <th>
+                    Hành động
+                </th>
+                <th>
+                    Mã sản phẩm
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    <span style="width:300px">
+                        Mô tả
+                    </span>
+                </th>
+                <th>
+                    ĐVT
+                </th>
+                <th>
+                    Kích thước
+                </th>
+                <th>
+                    Ghi chú
+                </th>
+                <th>
+                    Đơn giá
+                </th>
+                <th>
+                    VAT
+                </th>
+                <th>
+                    Số lượng
+                </th>
+                <th>
+                    Tổng nhập
+                </th>
+                <th>
+                    <span style="width:150px">
+                        Hình ảnh
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">settings</i>
+                                <p class="d-lg-none d-md-block">
+                                    Hành động
+                                </p>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div onclick="openUpdateModal('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">create</i>
+                                    <p>
+                                        Chỉnh sửa
+                                    </p>
+                                </div>
+                                <div onclick="openUpdateModal('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">delete</i>
+                                    <p>
+                                        Xóa
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="#">
+                            @item.ProductId
+                        </a>
+                    </td>
+                    <td>
+                        @item.Product.Name
+                    </td>
+                    <td>
+                        @item.ProductDetail
+                    </td>
+                    <td>
+                        @item.ProductUnit
+                    </td>
+                    <td>
+                        @item.ProductSize
+                    </td>
+                    <td>
+                        @item.ProductNote
+                    </td>
+                    <td>
+                        @item.UnitPrice.ToString("0,000")
+                    </td>
+                    <td>
+                        @item.VAT
+                    </td>
+                    <td>
+                        @item.ProductQuantity
+                    </td>
+                    <td>
+                        @item.TotalPrice.ToString("0,000")
+                    </td>
+                    <td>
+                        <img src="@item.Product.Images" />
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <custompager pager-model="@Model" />
+</div>

@@ -1,0 +1,24 @@
+﻿<script>
+
+
+    // resetAllFilter
+    $('#filter .reset-button').click(function () {
+        $('#filter input:not(:hidden)').val('');
+        $('#filter').submit();
+    });
+
+    // reload table
+    function reloadMainList() {
+        $('#mainList').load('/Management/Qoutation/MainListPartial');
+    }
+
+    function deleteOrder(orderId) {
+        $.post('/Management/Order/DeleteOrder?orderId=' + orderId).done(function () {
+            window.location.reload();
+        });
+    }
+    
+    function onInputSubmitFail(response) {
+        console.log(response.responseText);
+    }
+</script>

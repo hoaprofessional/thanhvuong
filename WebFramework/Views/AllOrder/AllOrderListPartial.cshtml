@@ -1,0 +1,148 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.AllOrderViewModel.AllOrderListPartialViewModel
+@using Framework.DTOs.QoutationManagementDto.BaseOrderDto;
+<table id="tasks" class="responsive-table dataTable display highlight" cellspacing="0">
+    <thead>
+        <tr>
+            <th name="@nameof(OrderDto.OrderId)">Id</th>
+            @if (nameof(OrderDto.ClientName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.ClientName)" class="sorting_@Model.SortingAction">Tên KH</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.ClientName)" class="sorting">Tên KH</th>
+            }
+
+
+            @if (nameof(OrderDto.StaffName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.StaffName)" class="sorting_@Model.SortingAction">NV tạo đơn</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.StaffName)" class="sorting">NV tạo đơn</th>
+            }
+
+            @if (nameof(OrderDto.OrderCreationTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderCreationTime)" class="sorting_@Model.SortingAction">Ngày tạo</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderCreationTime)" class="sorting">Ngày tạo</th>
+            }
+
+            @if (nameof(OrderDto.OrderCreationTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderExpectedReturnGoodDate)" class="sorting_@Model.SortingAction">Ngày hàng về</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderExpectedReturnGoodDate)" class="sorting">Ngày hàng về</th>
+            }
+
+            @if (nameof(OrderDto.OrderCreationTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderExpectedDeliveryDate)" class="sorting_@Model.SortingAction">Ngày giao</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderExpectedDeliveryDate)" class="sorting">Ngày giao</th>
+            }
+
+            @if (nameof(OrderDto.OrderTotalPrice) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderTotalPrice)" class="sorting_@Model.SortingAction">Tổng cộng</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderTotalPrice)" class="sorting">Tổng cộng</th>
+            }
+            @if (nameof(OrderDto.OrderStatusName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderStatusName)" class="sorting_@Model.SortingAction">Trạng thái</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderStatusName)" class="sorting">Trạng thái</th>
+            }
+            @if (nameof(OrderDto.OrderModifiedTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(OrderDto.OrderModifiedTime)" class="sorting_@Model.SortingAction">Cập nhật lần cuối</th>
+            }
+            else
+            {
+                <th name="@nameof(OrderDto.OrderModifiedTime)" class="sorting">Cập nhật lần cuối</th>
+            }
+            <th name="@nameof(OrderDto.OrderNote)">Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Order in Model.Orders)
+        {
+        <tr class="collection-item">
+            <td>
+                <a class="modal-trigger" href="/OrderDetail/Index/@Order.OrderId">@Order.OrderId</a>
+            </td>
+            <td>@Order.ClientName</td>
+            <td>@Order.StaffName</td>
+            <td>@Order.OrderCreationTime.Value.ToString("dd/MM/yyyy")</td>
+            @if (Order.OrderExpectedReturnGoodDate == null)
+            {
+                <td>Chưa nhập</td>
+            }
+            else
+            {
+                <td>@Order.OrderExpectedReturnGoodDate.Value.ToString("dd/MM/yyyy")</td>
+            }
+            @if (Order.OrderExpectedDeliveryDate == null)
+            {
+                <td>Chưa nhập</td>
+            }
+            else
+            {
+                <td>@Order.OrderExpectedDeliveryDate.Value.ToString("dd/MM/yyyy")</td>
+            }
+            <td>@Order.OrderTotalPrice.ToString("0,000") đ</td>
+            <td>@Order.OrderStatusName</td>
+            <td>@Order.OrderModifiedTime.Value.ToString("dd/MM/yyyy")</td>
+            <td>@Order.OrderNote</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagings" id="data-paging">
+    <div class="inner">
+        @{
+            int previousPage = Model.CurrentPage;
+            int nextPage = Model.CurrentPage + 2;
+        }
+        @if (previousPage - 1 >= 0)
+        {
+            <span class="action prev" value="@previousPage">Trước đó</span>
+        }
+
+        @for (int p = 1; p <= Model.NumberOfPages; p++)
+        {
+            if (p == Model.CurrentPage + 1)
+            {
+                <span class="number active" value="@p">
+                    @p
+                </span>
+            }
+            else
+            {
+                <span class="number" value="@p">
+                    @p
+                </span>
+            }
+        }
+        @if (nextPage - 1 < Model.NumberOfPages)
+        {
+            <span class="action next" value="@nextPage">
+                Tiếp theo
+            </span>
+        }
+    </div>
+</div>

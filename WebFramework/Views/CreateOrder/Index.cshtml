@@ -1,0 +1,280 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.CreateOrderViewModel.CreateOrderIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+    int no = 1;
+}
+
+
+
+<style>
+    .invoce-company-contact.right-align {
+        display: block;
+    }
+
+        .invoce-company-contact.right-align > a {
+            padding: 0px !important;
+            display: inline-block;
+            width: 48%;
+            margin-bottom: 10px;
+        }
+
+    .btn-large i {
+        margin-right: 20px;
+    }
+</style>
+
+
+<div class="container">
+    <div id="invoice">
+        <div class="invoice-header">
+            <div class="row section">
+                <div class="col s12 m6 l6">
+                    <img src="/images/company.png" alt="company logo">
+                    <p>
+                        Gửi khách hàng,
+                        <br />
+                        <span class="strong">@Model.Qoutation.Client.Name</span>
+                        <br />
+                        <span>Địa chỉ : @Model.Qoutation.Client.Address</span>
+                        <br />
+                        <span>Số điện thoại: @Model.Qoutation.Client.PhoneNumber</span>
+                    </p>
+                </div>
+                <div class="col s12 m6 l6">
+                    <div class="invoce-company-address right-align" style="padding: 5px 0px;">
+                        <span class="invoice-icon">
+                            <i class="material-icons green-text darken-4 ">location_city</i>
+                        </span>
+                        <p>
+                            <span class="strong">Công ty @Model.CommonConfiguration.CompanyName</span>
+                            <br />
+                            <span>@Model.CommonConfiguration.HeadQuarter</span>
+                            <br />
+                            <span>Liên hệ: @Model.CommonConfiguration.Contact</span>
+                            <br />
+                            <span>Hotline: @Model.CommonConfiguration.Hotline</span>
+                        </p>
+                    </div>
+                    <div class="qoutation-infomation right-align">
+                        <p>
+                            <span>Ngày tạo: @Model.Qoutation.CreationTime.Value.ToString("dd/MM/yyyy hh:mm")</span>
+                            <br />
+                            <span>Người tạo: @Model.Qoutation.QouteStaff.Name</span>
+                            <br />
+                            <span>Trạng thái: @Model.Qoutation.QoutationStatus.Name</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-lable gradient-45deg-green-teal">
+            <div class="row">
+                <div class="col s12 m3 l3">
+                    <h4 class="white-text invoice-text" style="padding-left: 20px;">ĐƠN ĐẶT HÀNG</h4>
+                </div>
+                <div class="col s12 m9 l9 invoice-brief white-text">
+                    <div class="flex row unflex-res">
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Tổng cộng</p>
+                            <h4 class="header total-all-price">@Model.Qoutation.TotalPriceSell.ToString("0,000") đ</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Số báo giá</p>
+                            <h4 id="Qoutation-id" class="header">@Model.Qoutation.Id</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Ngày xuất</p>
+                            <h4 class="header">@Model.Qoutation.CreationTime.Value.ToString("dd/MM/yyyy")</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <a id="save-button" class="btn-flat waves-effect white-text action-buttons">
+                                LƯU
+                                <i class="material-icons right">save</i>
+                            </a>
+                            <a href="/QoutationDetail/Index/@Model.Qoutation.Id" class="btn-flat waves-effect white-text action-buttons">
+                                HỦY
+                                <i class="material-icons right">cancel</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-table">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <table class="striped float" id="mainTable">
+                        <thead>
+                            <tr>
+                                <th width="5%"></th>
+                                <th width="5%">No</th>
+                                <th width="5%">Mã Sản phẩm</th>
+                                <th width="10%">Sản phẩm</th>
+                                <th width="10%" class="center">Hình ảnh</th>
+                                <th width="15%">Mô tả</th>
+                                <th width="5%">ĐVT</th>
+                                <th width="5%">Kích thước</th>
+                                <th width="10%">Ghi chú</th>
+                                <th width="10%">Đơn giá</th>
+                                <th width="5%">VAT</th>
+                                <th width="5%">Số lượng</th>
+                                <th width="10%">Tổng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var QoutationDetail in Model.Qoutation.QoutationDetails)
+                            {
+                                <tr data-product-id="@QoutationDetail.ProductId">
+                                    <td class="not-edit center">
+                                        <a class='red-text tooltipped modal-trigger remove-product'
+                                           data-position='top'
+                                           data-delay='50'
+                                           data-tooltip='Xóa sản phẩm'>
+                                            <i class='material-icons'>clear</i>
+                                        </a>
+                                    </td>
+                                    <td class="not-edit">@no</td>
+                                    <td class="not-edit">@QoutationDetail.Product.Id</td>
+                                    <td class="not-edit">@QoutationDetail.Product.Name</td>
+                                    <td class="not-edit"><img src="@QoutationDetail.Product.Images" /></td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductDetail)</td>
+                                    <td class="not-edit">@QoutationDetail.ProductUnit</td>
+                                    <td class="not-edit">@QoutationDetail.ProductSize</td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductNote)</td>
+                                    <td class="not-edit" data-name="UnitPrice" data-value="@QoutationDetail.UnitPriceSell">@QoutationDetail.UnitPriceSell.ToString("0,000") đ</td>
+                                    <td class="not-edit" data-name="VAT" data-value="@QoutationDetail.VATSell">@Html.Raw(QoutationDetail.VATSell * 100)%</td>
+                                    <td data-name="ProductQuantity" class="not-edit">
+                                        <input type="number" min="1" value="@QoutationDetail.ProductQuantity" class="unmargin"/>
+                                    </td>
+                                    <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
+                                </tr>
+                                no++;
+                            }
+                            <tr>
+                                <td colspan="10" class="not-edit">
+                                    <div class="auto-complete-content input-field">
+                                        <input style="margin-top:0;margin-bottom:0;" min="0" value="0" name="Promotion" type="number" id="Promotion">
+                                        <label for="Promotion">Giảm giá</label>
+                                    </div>
+                                </td>
+                                <td colspan="2" class="green white-text not-edit">Tổng cộng</td>
+                                <td class="total-all-price green strong white-text not-edit unborder-left">@Model.Qoutation.TotalPriceSell.ToString("0,000") đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-footer">
+            <div class="row">
+                @if (Model.Qoutation.SalesAdmin == null)
+                {
+                    <div class="col s12 m6 l6">
+                        <p>Báo giá chưa được duyệt</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col s12 m6 l6">
+                        <p>Đã được duyệt bởi</p>
+                        <p class="header">@Model.Qoutation.SalesAdmin.Name</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function refreshPrice(row) {
+            var totalPriceElem = $(row).find('td[data-name=TotalPrice]');
+            var unitPrice = parseInt($(row).find('td[data-name=UnitPrice]').attr('data-value'));
+            var vat = parseFloat($(row).find('td[data-name=VAT]').attr('data-value')) * unitPrice;
+            var productQuantity = parseInt($(row).find('td[data-name=ProductQuantity] input').val());
+            totalPriceElem.text((productQuantity * (unitPrice + vat)).formatMoney(0, '.', ',') + " đ");
+
+            var totalAllPrice = 0;
+            $('#mainTable tbody tr td[data-name="TotalPrice"]').each(function () {
+                totalAllPrice += parseInt(fixPrice($(this).text()));
+            });
+            $('#Promotion').attr('max', totalAllPrice);
+            totalAllPrice -= parseInt($('#Promotion').val());
+
+            $('.total-all-price').text(totalAllPrice.formatMoney(0, '.', ',') + " đ");
+        }
+        function refreshPriceAll() {
+            $('#mainTable tbody tr').each(function () {
+                var row = this;
+                var totalPriceElem = $(row).find('td[data-name=TotalPrice]');
+                var unitPrice = parseInt($(row).find('td[data-name=UnitPrice]').attr('data-value'));
+                var vat = parseFloat($(row).find('td[data-name=VAT]').attr('data-value')) * unitPrice;
+                var productQuantity = parseInt($(row).find('td[data-name=ProductQuantity] input').val());
+                totalPriceElem.text((productQuantity * (unitPrice + vat)).formatMoney(0, '.', ',') + " đ");
+            });
+
+            var totalAllPrice = 0;
+            $('#mainTable tbody tr td[data-name="TotalPrice"]').each(function () {
+                totalAllPrice += parseInt(fixPrice($(this).text()));
+            });
+            $('#Promotion').attr('max', totalAllPrice);
+            totalAllPrice -= parseInt($('#Promotion').val());
+
+            $('.total-all-price').text(totalAllPrice.formatMoney(0, '.', ',') + " đ");
+        }
+        refreshPriceAll();
+
+        $('#Promotion').on('keyup', function () {
+            if (parseInt($(this).val()) > parseInt($(this).attr('max'))) {
+                $(this).val($(this).attr('max'));
+            }
+            refreshPriceAll();
+        });
+
+        $('td[data-name=ProductQuantity] input').on('keyup', function () {
+            refreshPrice($(this).closest('tr'));
+        });
+
+        $('.remove-product').click(function () {
+            $($('.material-tooltip')[$(this).closest('tr').index()]).remove();
+            $(this).closest('tr').remove();
+            refreshPriceAll();
+        });
+
+
+        $('#save-button').click(function () {
+            if (parseInt(fixPrice($('.total-all-price').text())) < 0) {
+                error('Tổng tiền không được âm');
+                return;
+            }
+            var submitInput = {};
+            submitInput.QoutationId = $('#Qoutation-id').text();
+            submitInput.Promotion = $('#Promotion').val();
+            submitInput.Products = [];
+            $('table#mainTable tr:not(:last-child)').each(function () {
+                var product = {};
+                product.ProductId = $(this).attr('data-product-id');
+                product.productQuantity = $(this).find('td[data-name=ProductQuantity] input').val();
+                submitInput.Products.push(product);
+            });
+            $('#save-button').text('Vui lòng chờ');
+            $('#save-button').css('pointer-events', 'none');
+            $.post('/CreateOrder/SubmitOrder', submitInput, function (response) {
+                if (response.result == "success") {
+                    success('Tạo đơn đặt hàng thành công', function () {
+                        window.location.href = "/AllOrder";
+                    });
+                }
+                else {
+                    error(response.message);
+                    $('#save-button').text('Lưu');
+                    $('#save-button').css('pointer-events', '');
+                }
+            }).fail(function () { 
+                error('Lỗi đường truyền');
+                $('#save-button').text('Lưu');
+                $('#save-button').css('pointer-events', '');
+            });
+        });
+
+    </script>
+}

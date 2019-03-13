@@ -1,0 +1,570 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.CreateOrderViewModel.CreateBlankOrderViewModel
+
+<style>
+    input.select-dropdown {
+        margin-bottom: 5px !important;
+    }
+</style>
+
+<div class="container">
+    <div id="invoice">
+        <div class="invoice-header">
+            <div class="row section">
+                <div class="col s12 m6 l6">
+                    <img src="@Model.Configuration.Logo" alt="company logo">
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="auto-complete-content" data-name="client">
+                                <div class="input-field">
+                                    <input name="ClientName" type="text" id="ClientName" class="autocomplete get-value">
+                                    <label for="ClientName">Tên khách hàng</label>
+                                </div>
+                                <select aria-controls="data-table-simple" class="select-of-auto-complete">
+                                    @foreach (var client in Model.Clients)
+                                    {
+                                        <option name="abc"
+                                                data-text="@client.Name"
+                                                data-address="@client.Address"
+                                                data-phone-number="@client.PhoneNumber">
+                                            @client.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="auto-complete-content input-field">
+                                <input name="ClientAddress" type="text" id="ClientAddress">
+                                <label for="ClientAddress">Địa chỉ</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 l6">
+                    <div class="invoce-company-address right-align" style="padding: 25px 0px;">
+                        <p>
+                            <span class="strong">@Model.Configuration.CompanyName</span>
+                            <br />
+                            <span>@Model.Configuration.HeadQuarter</span>
+                            <br />
+                            <span>Liên hệ: @Model.Configuration.Contact</span>
+                            <br />
+                            <span>Hotline: @Model.Configuration.Hotline</span>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="auto-complete-content input-field">
+                                <input name="ClientPhoneNumber" type="text" id="ClientPhoneNumber">
+                                <label for="ClientPhoneNumber">Số điện thoại</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="auto-complete-content input-field">
+                                <input name="DeliveryPlace" type="text" id="DeliveryPlace">
+                                <label for="DeliveryPlace">Địa điểm giao hàng</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="invoice-lable gradient-45deg-green-teal">
+            <div class="row flex align">
+                <div class="col s12 m3 l3">
+                    <h4 class="white-text invoice-text" style="padding-left: 20px;">ĐƠN ĐẶT HÀNG</h4>
+                </div>
+                <div class="col s12 m9 l4 invoice-brief white-text">
+                    <div class="row">
+                        <div class="col s12 m3 l3">
+                        </div>
+                        <div class="col s12 m3 l3">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s2 m6 l5">
+                    <a id="save-product" class="btn-flat waves-effect white-text right ">
+                        <i class="material-icons right">save</i> LƯU
+                    </a>
+                    <a href="/WorkList" class="btn-flat waves-effect white-text right">
+                        <i class="material-icons right">cancel</i> HỦY
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-table">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <table class="bordered" id="mainTable">
+                        <thead>
+                            <tr>
+                                <th width="5%" class="button">
+                                    <a class="waves-effect waves-light btn gradient-45deg-green-teal" onclick="addRow()">
+                                        <i class="material-icons">add</i>
+                                    </a>
+                                </th>
+                                <th width="10%">Mã sản phẩm</th>
+                                <th width="10%">Sản phẩm</th>
+                                <th width="15%">Mô tả</th>
+                                <th width="5%">DVT</th>
+                                <th width="10%">Kích thước</th>
+                                <th width="10%">Giá tiền</th>
+                                <th width="5%">VAT</th>
+                                <th width="5%">Số lượng</th>
+                                <th width="10%">Hỉnh ảnh sản phẩm</th>
+                                <th width="10%">Ghi chú</th>
+                                <th width="10%">Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="error-row">
+                                <td class="not-edit"></td>
+                                <td>
+                                    <div class="input-field">
+                                        <input type="text" id="autocomplete-input" name="product" class="autocomplete">
+                                        <label for="autocomplete-input">Sản phẩm</label>
+                                    </div>
+                                </td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="not-edit">
+                                    <div class="auto-complete-content input-field">
+                                        <input style="margin-top:0;margin-bottom:0;" min="0" value="0" name="Promotion" type="number" id="Promotion">
+                                        <label for="Promotion">Giảm giá</label>
+                                    </div>
+                                </td>
+                                <td colspan="3" class="green white-text not-edit">Tổng cộng</td>
+                                <td colspan="1" class="total-all-price green strong white-text not-edit unborder-left">0 đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script>
+
+        function addRow() {
+            var table = document.getElementById("mainTable");
+            var row = table.insertRow(table.rows.length - 2);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            var cell6 = row.insertCell(5);
+            var cell7 = row.insertCell(6);
+            var cell8 = row.insertCell(7);
+            var cell9 = row.insertCell(8);
+            var cell10 = row.insertCell(9);
+            var cell11 = row.insertCell(10);
+            var cell12 = row.insertCell(11);
+
+            var uniqueId = uniqId();
+
+
+            cell1.className = "not-edit delete-row center";
+            cell1.innerHTML = "<a class='red-text tooltipped modal-trigger remove-product' \
+            data-position='top' \
+            data-delay='50' \
+            data-tooltip='Xóa sản phẩm' > \
+                <i class='material-icons'>clear</i> \
+                                        </a >";
+
+            cell2.innerHTML = "<div class='input-field'><input type='text' id='autocomplete-input' name='product' class='autocomplete get-value'></div>";
+            cell2.className = "not-edit";
+            $(cell2).attr('data-name', 'ProductId');
+
+            cell3.innerHTML = "<div class='input-field'><input type='text' id='autocomplete-input' name='product' class='autocomplete get-value'></div>";
+            cell3.className = "not-edit";
+            $(cell3).attr('data-name', 'ProductName');
+
+            cell4.innerHTML = "<div class='input-field'><div class='tinymce tiny-" + uniqueId + " get-value'></div></div>";
+            cell4.className = "not-edit";
+            $(cell4).attr('data-name', 'Decription');
+
+            cell5.innerHTML = "<div class='input-field'><input id='autocomplete-input' name='product' class='get-value'></div>";
+            cell5.className = "not-edit";
+            $(cell5).attr('data-name', 'Unit');
+
+            cell6.innerHTML = "<div class='input-field'><input id='autocomplete-input' name='product' class='get-value'></div>";
+            cell6.className = "not-edit";
+            $(cell6).attr('data-name', 'Size');
+
+
+            cell7.innerHTML = "<div class='input-field'><input type='number' min='1' value='1' id='autocomplete-input' name='product' class='get-value price'></div>";
+            cell7.className = "not-edit";
+            $(cell7).attr('data-name', 'ProductPrice');
+
+            cell8.innerHTML = '<select class="get-value" data-name="VAT">\
+                <option value="0">0%</option>\
+                    <option value="0.05">5%</option>\
+                    <option value="0.1">10%</option>\
+                                            </select>';
+            $('select.get-value').material_select();
+            cell8.className = "not-edit";
+            $(cell8).attr('data-name', 'VAT');
+
+            cell9.innerHTML = "<div class='input-field'><input type='number' min='1' value='1' id='autocomplete-input' name='product' class='get-value'></div>";
+            cell9.className = "not-edit";
+            $(cell9).attr('data-name', 'ProductQuantity');
+
+            cell10.innerHTML = '<div class="input-field get-value"><input name="get-image-value" type="hidden"> <img class="image-preview" style="display:none;"> <input type="file" id="input-file-events" class="dropify-event file-show" data-max-file-size="2M" data-disable-remove="true" /></div>';
+            cell10.className = "not-edit";
+            $(cell10).attr('data-name', 'ProductImage');
+
+            cell11.innerHTML = "<div class='input-field'><div class='tinymce tiny-" + uniqueId + " get-value'></div></div>";
+            cell11.className = "not-edit";
+            $(cell11).attr('data-name', 'ProductNote');
+
+            cell12.innerHTML = '<div class="total-price"><input readonly min="1" value="0" id="autocomplete-input" name="product" class="get-value total-price unborder unmargin"></div>';
+            cell12.className = "not-edit";
+            $(cell12).attr('data-name', 'TotalPrice');
+
+            var config = {
+                selector: ".tiny-" + uniqueId,
+                menubar: false,
+                inline: true,
+                plugins: [
+                    'textcolor',
+                    'lists',
+                    'contextmenu',
+                    'autolink'
+                ],
+                toolbar: [
+                    'undo redo | bold italic underline | fontselect fontsizeselect',
+                    'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
+                ],
+                valid_elements: 'strong,em,span[style],a[href]',
+                valid_styles: {
+                    '*': 'font-size,font-family,color,text-decoration,text-align'
+                },
+                powerpaste_word_import: 'clean',
+                powerpaste_html_import: 'clean',
+                content_css: [
+                    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                ]
+            };
+            tinymce.init(config);
+            initProduct();
+            initEdittable();
+
+            $('.dropify-event').dropify();
+        }
+
+
+        $('body').delegate('.delete-row i', 'click', function () {
+            $(this).closest('tr').remove();
+        });
+
+        function autoComplete(liElem) {
+
+            var text = $(liElem).text().trim();
+            var optionElem = $(String.format('option[data-text="{0}"]', text));
+            if (optionElem.length == 0) {
+                return;
+            }
+            var address = optionElem.attr('data-address');
+            var phoneNumber = optionElem.attr('data-phone-number');
+
+            if (address != "" && address != null) {
+                $('#ClientAddress').parent().find('label').addClass('active');
+                $('#ClientAddress').val(address);
+            }
+
+            if (phoneNumber != "" && phoneNumber != null) {
+                $('#ClientPhoneNumber').parent().find('label').addClass('active');
+                $('#ClientPhoneNumber').val(phoneNumber);
+            }
+
+        }
+
+        function initProduct() {
+            $('input.autocomplete[name="product"]').each(function () {
+                var t = $(this);
+               $(this).autocomplete({
+                data: {
+                    @foreach (var product in Model.Products)
+    {
+@Html.Raw(String.Format("'{0} : {1}' : null,", product.Name, product.Id))
+}
+                    @Html.Raw("'':null")
+                },
+                limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                onAutocomplete: function (val) {
+                    var twoDotIndex = val.lastIndexOf(":");
+                    var productName = val.substring(0, twoDotIndex).trim();
+                    var productId = val.substring(twoDotIndex + 1).trim();
+                    var canContinue = true;
+                    $('table#mainTable tbody td[data-name=ProductId] input').each(function () {
+                        if (!canContinue)
+                            return;
+                        if ($(this).val() == productId) {
+                            error("Mã sản phẩm đã tồn tại");
+                            t.val('');
+                            canContinue = false;
+                        }
+                    });
+                    if (!canContinue)
+                        return;
+                    $.get('/QoutationDetail/GetProduct?productId=' + productId, function (response) {
+                        if (response.result == "success") {
+                            var trElem = $(t).closest('tr');
+                            trElem.find('td[data-name=ProductId] .get-value').val(productId);
+                            trElem.find('td[data-name=ProductName] .get-value').val(productName);
+                            trElem.find('td[data-name=Decription] .tinymce').html(response.data.decription);
+                            trElem.find('td[data-name=Unit] .get-value').val(response.data.unit);
+                            trElem.find('td[data-name=Size] .get-value').val(response.data.size);
+                            trElem.find('td[data-name=ProductImage] .get-image-value').val(response.data.images);
+
+                            trElem.find('td[data-name=ProductImage] .dropify-render *').remove();
+                            trElem.find('td[data-name=ProductImage] .dropify-render').append(String.format(
+                                '<img src="{0}">', response.data.images
+                            ));
+                            trElem.find('td[data-name=ProductImage] .dropify-wrapper').addClass('has-preview');
+                            trElem.find('td[data-name=ProductImage] .dropify-preview').css('display','block');
+                        }
+                    });
+                },
+                minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+            });
+
+            });
+        }
+        var d = new Date();
+        function getCurrentDateString() {
+            return d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear() + "-" + d.getHours() + "-" +( d.getMinutes() * 60000 + d.getSeconds()*1000 + d.getMilliseconds());
+        }
+        $('body').delegate('input', 'keyup', function () {
+            $(this).removeClass('error');
+        });
+
+
+        function refreshPrice() {
+            var totalPrice = 0;
+            $('#mainTable tbody tr:not(.error-row):not(:last-child)').each(function () {
+                var price = parseInt($(this).find('.price').val());
+                var vat = parseFloat($(this).find('td[data-name="VAT"] select').val());
+                var quantity = parseInt($(this).find('td[data-name="ProductQuantity"] input').val());
+                totalPrice += quantity * (price + price * vat);
+            });
+
+            var promotion = parseInt($('#Promotion').val());
+            if (promotion > totalPrice) {
+                $('#Promotion').val(totalPrice);
+                promotion = totalPrice;
+            }
+
+            var moneyStr = (totalPrice - promotion).formatMoney();
+            moneyStr = moneyStr.substr(0, moneyStr.indexOf('.')) + " đ"
+            $('.total-all-price').text(moneyStr);
+        }
+
+        function refreshPriceRow(row) {
+            var price = parseInt($(row).find('.price').val());
+            var vat = parseFloat($(row).find('td[data-name="VAT"] select').val());
+            var quantity = parseInt($(row).find('td[data-name="ProductQuantity"] input').val());
+
+            var moneyStr = (quantity * (price + price * vat)).formatMoney();
+            moneyStr = moneyStr.substr(0, moneyStr.indexOf('.')) + " đ"
+
+            $(row).find('.total-price input').val(moneyStr);
+        }
+
+        $('body').delegate('.price', 'keyup', function () {
+            refreshPrice();
+            refreshPriceRow($(this).closest('tr'));
+        });
+
+        $('body').delegate('td[data-name="ProductQuantity"] input', 'keyup', function () {
+            refreshPrice();
+            refreshPriceRow($(this).closest('tr'));
+        });
+
+        $('body').delegate('td[data-name="VAT"] select', 'change', function () {
+            refreshPrice();
+            refreshPriceRow($(this).closest('tr'));
+        });
+
+        $('#Promotion').on('keyup', function () {
+            refreshPrice();
+            refreshPriceRow($(this).closest('tr'));
+        });
+
+        $(function () {
+            var writeToSrc = function (input, imgElem) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $(imgElem).attr('src', e.target.result);
+                        console.log(e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $('body').delegate (".dropify-event.file-show",'change',function () {
+                writeToSrc(this, $(this).closest('tr').find('.image-preview'));
+
+            });
+        })
+
+
+
+
+        $('#save-product').click(function () {
+            var createObjectInput = {};
+            var errorCounter = 0;
+            var errorMessage = [];
+            createObjectInput.Name = $('input[name=ClientName]').val();
+            createObjectInput.Address = $('input[name=ClientAddress]').val();
+            createObjectInput.PhoneNumber = $('input[name=ClientPhoneNumber]').val();
+            createObjectInput.DeliveryPlace = $('input[name=DeliveryPlace]').val();
+            createObjectInput.EstimatedInstallationTime = $('input[name=EstimatedInstallationTime]').val();
+            createObjectInput.Products = [];
+            if (createObjectInput.Name == '') {
+                errorMessage.push('Tên khách hàng không được để trống');
+                $('input[name=ClientName]').addClass('error');
+                errorCounter++;
+            }
+
+            if (createObjectInput.Address == '') {
+                errorMessage.push('Địa chỉ không được để trống');
+                $('input[name=ClientAddress]').addClass('error');
+                errorCounter++;
+            }
+
+            if (createObjectInput.PhoneNumber == '') {
+                errorMessage.push('Số điện thoại không được để trống');
+                $('input[name=ClientPhoneNumber]').addClass('error');
+                errorCounter++;
+            }
+
+            if (createObjectInput.DeliveryPlace == '') {
+                errorMessage.push('Địa điểm giao hàng không được để trống');
+                $('input[name=DeliveryPlace]').addClass('error');
+                errorCounter++;
+            }
+
+            if (errorCounter > 0) {
+                error(errorMessage.join('\r\n'));
+                return;
+            }
+
+            var trData = $('#mainTable tr:not(.error-row)');
+
+            if (trData.length <= 1) {
+                error('Phải nhập sản phẩm');
+                return;
+            }
+
+            var canPost = true;
+
+            trData.each(function () {
+                var product = {};
+                if ($(this).find('td[data-name=ProductName] input').length == 0) {
+                    return;
+                }
+                var trElem = $(this);
+                product.ProductName = trElem.find('td[data-name=ProductName] input').val();
+                product.ProductQuantity = trElem.find('td[data-name=ProductQuantity] input').val();
+                product.ProductId = trElem.find('td[data-name=ProductId] input').val();
+                product.ProductNote = trElem.find('td[data-name=ProductNote] div.tinymce').html()
+                product.ProductDetail = trElem.find('td[data-name=Decription] div.tinymce').html()
+                product.Unit = trElem.find('td[data-name=Unit] input').val()
+                product.ProductSize = trElem.find('td[data-name=Size] input').val()
+                product.ProductPrice = trElem.find('td[data-name=ProductPrice] input').val()
+                product.VAT = trElem.find('td[data-name=VAT] select').val()
+                product.ProductImageCode = getBase64Image(trElem.find('.image-preview')[0]);
+                product.ProductImage = trElem.find('.get-image-value').val();
+                if (product.ProductName == null || product.ProductName == '') {
+                    error('Phải nhập tên sản phẩm');
+                    $(this).find('td[data-name=ProductName] input').addClass('error');
+                    canPost = false;
+                    return;
+                }
+                if (product.Unit == null || product.Unit == '') {
+                    error('Phải nhập đơn vị tính');
+                    $(this).find('td[data-name=Unit] input').addClass('error');
+                    canPost = false;
+                    return;
+                }
+                if (product.ProductSize == null || product.ProductSize == '') {
+                    error('Phải nhập kích thước');
+                    $(this).find('td[data-name=Size] input').addClass('error');
+                    canPost = false;
+                    return;
+                }
+                if (product.ProductQuantity <= 0) {
+                    error('Số lượng sản phẩm không hợp lệ');
+                    $(this).find('td[data-name=ProductQuantity] input').addClass('error');
+                    canPost = false;
+                    return;
+                }
+                createObjectInput.Products.push(product);
+            });
+            if (!canPost)
+                return;
+            var t = this;
+
+
+            $(this).css('pointer-events', 'none');
+            $(this).text('Vui lòng chờ');
+
+            $.post('/CreateOrder/SubmitBlankOrder', createObjectInput).done(function (response) {
+                if (response.result == "success") {
+                    success("Lưu thành công", function () {
+                        window.location.href = "/AllOrder";
+                    });
+                }
+                else {
+                    error(response.message);
+                    $(this).css('pointer-events', '');
+                    $(this).text('LƯU');
+                }
+            }).fail(function (response) {
+                error('Lỗi đường truyền mạng!');
+                $(t).css('pointer-events', '');
+                $(t).text('LƯU');
+                });
+
+
+
+
+
+            //$.post('/CreateQoutation/SubmitQoutation', formData, function (response) {
+            //    if (response.result == "success") {
+            //        success("Lưu thành công", function () {
+            //            window.location.href = "/AllQoutation";
+            //        });
+            //    }
+            //    else {
+            //        error(response.message);
+            //        $(this).css('pointer-events', '');
+            //        $(this).text('LƯU');
+            //    }
+            //}).fail(function () {
+            //    error('Lỗi đường truyền mạng!');
+            //    $(t).css('pointer-events', '');
+            //    $(t).text('LƯU');
+            //});
+    });
+
+
+
+    </script>
+}

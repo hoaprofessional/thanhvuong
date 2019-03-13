@@ -1,0 +1,51 @@
+﻿@model WebCore.Utils.ModelHelper.PagingResultDto<WebCore.Services.Share.Admins.Roles.Dto.RoleDto>
+<div class="table-responsive">
+    <table class="table">
+        <thead class=" text-primary">
+            <tr>
+                <th>
+                    Hành động
+                </th>
+                <th>
+                    Tên nhóm quyền
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">settings</i>
+                                <p class="d-lg-none d-md-block">
+                                    Hành động
+                                </p>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div onclick="openUpdateModal('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">create</i>
+                                    <p>
+                                        Cập nhật
+                                    </p>
+                                </div>
+                                <div onclick="openAssignPermissionModal('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">create</i>
+                                    <p>
+                                        Phân quyền
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <custompager pager-model="@Model" />
+</div>

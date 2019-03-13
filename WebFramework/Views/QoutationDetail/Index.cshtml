@@ -1,0 +1,626 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.QoutationDetailViewModel.QoutationDetailIndexViewModel
+@{
+    int no = 1;
+}
+@using Framework.Utils
+
+<style>
+    .invoce-company-contact.right-align {
+        display: block;
+    }
+
+        .invoce-company-contact.right-align > a {
+            padding: 0px !important;
+            display: inline-block;
+            width: 48%;
+            margin-bottom: 10px;
+        }
+
+    .btn-large i {
+        margin-right: 20px;
+    }
+
+    table#mainTable tbody tr:nth-child(odd) input {
+        background: #f2f2f2 !important;
+    }
+</style>
+
+
+<div class="container">
+    <div id="invoice">
+        <div class="invoice-header">
+            <div class="row section">
+                <div class="col s12 m6 l6">
+                    <img src="/images/company.png" alt="company logo">
+                    <p>
+                        Gửi khách hàng,
+                        <br />
+                        <span class="strong">@Model.Qoutation.Client.Name</span>
+                        <br />
+                        <span>Địa chỉ : @Model.Qoutation.Client.Address</span>
+                        <br />
+                        <span>Số điện thoại: @Model.Qoutation.Client.PhoneNumber</span>
+                        <br />
+                        <span>Địa điểm giao hàng: @Model.Qoutation.DeliveryPlace</span>
+                        <br />
+                        <span>Ngày dự kiến hoàn thành báo giá: @Html.Raw(Model.Qoutation.CreationTime.Value.AddDays((int)Model.Qoutation.EstimatedInstallationTime).ToString("dd/MM/yyyy"))</span>
+                    </p>
+                </div>
+                <div class="col s12 m6 l6">
+                    <div class="invoce-company-address right-align" style="padding: 5px 0px;">
+                        <span class="invoice-icon">
+                            <i class="material-icons green-text darken-4 ">location_city</i>
+                        </span>
+                        <p>
+                            <span class="strong">Công ty @Model.CommonConfiguration.CompanyName</span>
+                            <br />
+                            <span>@Model.CommonConfiguration.HeadQuarter</span>
+                            <br />
+                            <span>Liên hệ: @Model.CommonConfiguration.Contact</span>
+                            <br />
+                            <span>Hotline: @Model.CommonConfiguration.Hotline</span>
+                        </p>
+                    </div>
+                    <div class="qoutation-infomation right-align">
+                        <p>
+                            <span>Ngày tạo: @Model.Qoutation.CreationTime.Value.ToString("dd/MM/yyyy hh:mm")</span>
+                            <br />
+                            <span>Người tạo: @Model.Qoutation.QouteStaff.Name</span>
+                            <br />
+                            <span>Trạng thái: @Model.Qoutation.QoutationStatus.Name</span>
+                        </p>
+                    </div>
+                    <div class="invoce-company-contact right-align">
+
+                        @if (Model.CanAujustPriceBuy)
+                        {
+                            <a id="save-price-buy-qoutation" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> LƯU GIÁ NHẬP
+                            </a>
+                        }
+
+                        @if (Model.CanAujustPriceSell)
+                        {
+                            <a id="save-price-sell-qoutation" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> LƯU GIÁ BÁN
+                            </a>
+                            <a id="reject-price-buy-qoutation" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> YÊU CẦU NHẬP LẠI GIÁ NHẬP
+                            </a>
+                        }
+
+                        @if (Model.CanApprovePriceByAccountingManager)
+                        {
+                            <a id="button-approve-price" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> PHÊ DUYỆT
+                            </a>
+                            <a id="button-reject-price" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> TỪ CHỐI
+                            </a>
+                        }
+
+                        @if (Model.CanApprovePriceBySalesManager)
+                        {
+                            <a id="button-approve-price" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> PHÊ DUYỆT
+                            </a>
+                            <a id="button-reject-price" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> TỪ CHỐI
+                            </a>
+                        }
+
+                        @if (Model.CanApproveQoutation)
+                        {
+                            <a id="approve-Qoutation" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> DUYỆT ĐƠN
+                            </a>
+                        }
+                        @if (Model.CanRejectQoutation)
+                        {
+                            <a id="reject-Qoutation-button" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> HỦY ĐƠN
+                            </a>
+                            <div style="display:none;" class="reject-Qoutation input-field">
+                                <textarea class="materialize-textarea" id="content-reson"></textarea>
+                                <label for="content-reson">Nhập lý do muốn hủy</label>
+                                <span style="display:none;" class="error-text">Không được để trống</span>
+                            </div>
+                        }
+
+                        @if (Model.CanCreateOrder)
+                        {
+                            <a href="/CreateOrder?qoutationId=@Model.Qoutation.Id" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> TẠO ĐƠN ĐẶT HÀNG
+                            </a>
+                        }
+
+
+                        @if (Model.CanQuotesPrice)
+                        {
+                            <a id="client-reject" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">cancel</i> KH TỪ CHỐI
+                            </a>
+                        }
+                        @if (Model.CanPrintPdf)
+                        {
+                            <a href="/PrintPdf/QoutationPrint?QoutationId=@Model.Qoutation.Id" target="_blank" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">local_printshop</i> IN BÁO GIÁ
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-lable gradient-45deg-green-teal">
+            <div class="row">
+                <div class="col s12 m3 l3">
+                    <h4 class="white-text invoice-text" style="padding-left: 20px;">BÁO GIÁ</h4>
+                </div>
+                <div class="col s12 m9 l9 invoice-brief white-text">
+                    <div class="row">
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Tổng nhập</p>
+                            <h4 class="header total-all-price">@Model.Qoutation.TotalPriceBuy.ToString("0,000") đ</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Tổng bán</p>
+                            <h4 class="header total-all-price">@Model.Qoutation.TotalPriceSell.ToString("0,000") đ</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Số báo giá</p>
+                            <h4 id="Qoutation-id" class="header">@Model.Qoutation.Id</h4>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <p class="strong">Ngày xuất</p>
+                            <h4 class="header">@Model.Qoutation.CreationTime.Value.ToString("dd/MM/yyyy")</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-table">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <table class="striped float" id="mainTable">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="5%">Mã sản phẩm</th>
+                                <th width="5%">Sản phẩm</th>
+                                <th width="10%">Mô tả</th>
+                                <th width="5%">ĐVT</th>
+                                <th width="5%">Kích thước</th>
+                                <th width="10%">Ghi chú</th>
+                                <th width="10%">Đơn giá nhập</th>
+                                <th width="5%">VAT nhập</th>
+                                <th width="10%">Đơn giá bán</th>
+                                <th width="5%">VAT bán</th>
+                                <th width="5%">Số lượng</th>
+                                <th width="5%">Tổng nhập</th>
+                                <th width="5%">Tổng bán</th>
+                                <th width="10%" class="center">Hình ảnh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var QoutationDetail in Model.Qoutation.QoutationDetails)
+                            {
+                                <tr data-product-id="@QoutationDetail.ProductId">
+                                    <td class="not-edit">@no</td>
+                                    <td class="not-edit">@QoutationDetail.Product.Id</td>
+                                    <td class="not-edit">@QoutationDetail.Product.Name</td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductDetail)</td>
+                                    <td class="not-edit">@QoutationDetail.ProductUnit</td>
+                                    <td class="not-edit">@QoutationDetail.ProductSize</td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductNote)</td>
+                                    @if (Model.CanAujustPriceBuy)
+                                    {
+                                        <td class="not-edit" data-name="UnitPrice">
+                                            <input type="number" data-name="UnitPrice" min="0" value="0" />
+                                        </td>
+                                        <td data-name="VAT" class="not-edit">
+                                            <select data-name="VAT">
+                                                <option value="0">0%</option>
+                                                <option value="0.05">5%</option>
+                                                <option value="0.1">10%</option>
+                                            </select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="not-edit">@QoutationDetail.UnitPriceBuy.ToString("0,000") đ</td>
+                                        <td class="not-edit">@Html.Raw(QoutationDetail.VATBuy * 100)%</td>
+                                    }
+                                    @if (Model.CanAujustPriceSell)
+                                    {
+                                        <td class="not-edit" data-name="UnitPrice">
+                                            <input type="number" data-name="UnitPrice" min="0" value="0" />
+                                        </td>
+                                        <td data-name="VAT" class="not-edit">
+                                            <select data-name="VAT">
+                                                <option value="0">0%</option>
+                                                <option value="0.05">5%</option>
+                                                <option value="0.1">10%</option>
+                                            </select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="not-edit">@QoutationDetail.UnitPriceSell.ToString("0,000") đ</td>
+                                        <td class="not-edit">@Html.Raw(QoutationDetail.VATSell * 100)%</td>
+                                    }
+
+                                    <td data-name="ProductQuantity" class="not-edit">@QoutationDetail.ProductQuantity</td>
+                                    @if (Model.CanAujustPriceBuy)
+                                    {
+                                        <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
+                                    }
+
+                                    @if (Model.CanAujustPriceSell)
+                                    {
+                                        <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
+                                    }
+                                    <td class="not-edit"><img src="@QoutationDetail.Product.Images" /></td>
+                                </tr>
+                                no++;
+                            }
+                            <tr>
+                                <td colspan="7" class="not-edit"></td>
+                                @{
+                                    var cls = "";
+                                    if (Model.CanAujustPriceBuy)
+                                    {
+                                        cls = "total-all-price";
+                                    }
+                                }
+                                <td colspan="2" class="green white-text not-edit">Tổng nhập</td>
+                                <td colspan="2" class="@cls green strong white-text not-edit">@Model.Qoutation.TotalPriceBuy.ToString("0,000") đ</td>
+                                <td colspan="2" class="green white-text not-edit">Tổng bán</td>
+                                @{
+                                    cls = "";
+                                    if (Model.CanAujustPriceSell)
+                                    {
+                                        cls = "total-all-price";
+                                    }
+                                }
+                                <td colspan="2" class="@cls green strong white-text not-edit">@Model.Qoutation.TotalPriceSell.ToString("0,000") đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-footer">
+            <div class="row">
+                @if (Model.Qoutation.SalesAdmin == null)
+                {
+                    <div class="col s12 m6 l6">
+                        <p>Báo giá chưa được duyệt</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col s12 m6 l6">
+                        <p>Đã được duyệt bởi</p>
+                        <p class="header">@Model.Qoutation.SalesAdmin.Name</p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    @if (Model.CanQuotesPrice)
+    {
+        <script>
+
+
+            $('#client-reject').click(function () {
+                var qoutesInput = {};
+                qoutesInput.QoutationId = $('#Qoutation-id').text();
+                qoutesInput.QuotesType = "reject";
+                quotesPrice(qoutesInput);
+            });
+
+            function quotesPrice(qoutesInput) {
+                $.post('/QoutationDetail/QuotesPrice', qoutesInput,
+                    function (response) {
+                        if (response.result == "success") {
+                            success('Thành công', function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            error(response.content);
+                        }
+
+                    });
+            }
+        </script>
+    }
+
+    @if (Model.CanApproveQoutation)
+    {
+        <script>
+            @* trưởng phòng sale duyệt đơn *@
+            $('#approve-Qoutation').click(function () {
+                $.post('/QoutationDetail/ApproveQoutation', { QoutationId: $('#Qoutation-id').text() }, function (response) {
+                    if (response.result == "success") {
+                        success('Duyệt đơn thành công', function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        error(response.content);
+                    }
+
+                });
+            });
+        </script>
+    }
+
+
+    @if (Model.CanAujustPriceBuy)
+    {
+        <script>
+            function refreshPrice(row) {
+                var totalPriceElem = $(row).find('td[data-name=TotalPrice]');
+                var unitPrice = parseInt($(row).find('td[data-name=UnitPrice] input').val());
+                var vat = $(row).find('td[data-name=VAT] select').val() * unitPrice;
+                var productQuantity = parseInt($(row).find('td[data-name=ProductQuantity]').text());
+                console.log(vat);
+                totalPriceElem.text((productQuantity * (unitPrice + vat)).formatMoney(0, '.', ',') + " đ");
+
+                var totalAllPrice = 0;
+                $('#mainTable tbody tr td[data-name="TotalPrice"]').each(function () {
+                    totalAllPrice += parseInt(fixPrice($(this).text()));
+                });
+
+                $('.total-all-price').text(totalAllPrice.formatMoney(0, '.', ',') + " đ");
+            }
+            $('body').delegate('input[data-name=UnitPrice]', 'keyup', function () {
+                refreshPrice($(this).closest('tr'));
+            });
+            $('body').delegate('select[data-name=VAT]', 'change', function () {
+                refreshPrice($(this).closest('tr'));
+            });
+            $('#save-price-buy-qoutation').click(function () {
+                $('tr input.error').removeClass('error');
+                var QoutationId = $('#Qoutation-id').text();
+                var products = [];
+                var canSubmit = true;
+                $('#mainTable tbody tr:not(:last-child)').each(function () {
+                    var product = {};
+                    product.ProductId = $(this).attr('data-product-id');
+
+                    product['UnitPrice'] = parseInt($(this).find('td[data-name=UnitPrice] input').val());
+                    product['VAT'] = parseFloat($(this).find('td[data-name=VAT] select').val());
+
+                    if (product['UnitPrice'] == 0) {
+                        if (canSubmit) {
+                            error('Đơn giá không được để trống');
+                        }
+                        $(this).find('td[data-name=UnitPrice] input').addClass('error');
+                        canSubmit = false;
+                    }
+
+                    products.push(product);
+                });
+
+                if (!canSubmit) {
+                    return;
+
+                }
+
+                $.post('/QoutationDetail/AccountantFillPriceBuy',
+                    { QoutationId: QoutationId, Products: products }, function (response) {
+                        if (response.result == "success") {
+                            success('Sửa giá thành công', function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            error(response.content);
+                        }
+                    });
+
+            });
+        </script>
+    }
+
+
+    @if (Model.CanAujustPriceSell)
+    {
+        <script>
+            function refreshPrice(row) {
+                var totalPriceElem = $(row).find('td[data-name=TotalPrice]');
+                var unitPrice = parseInt($(row).find('td[data-name=UnitPrice] input').val());
+                var vat = $(row).find('td[data-name=VAT] select').val() * unitPrice;
+                var productQuantity = parseInt($(row).find('td[data-name=ProductQuantity]').text());
+                console.log(vat);
+                totalPriceElem.text((productQuantity * (unitPrice + vat)).formatMoney(0, '.', ',') + " đ");
+
+                var totalAllPrice = 0;
+                $('#mainTable tbody tr td[data-name="TotalPrice"]').each(function () {
+                    totalAllPrice += parseInt(fixPrice($(this).text()));
+                });
+
+                $('.total-all-price').text(totalAllPrice.formatMoney(0, '.', ',') + " đ");
+            }
+            $('body').delegate('input[data-name=UnitPrice]', 'keyup', function () {
+                refreshPrice($(this).closest('tr'));
+            });
+            $('body').delegate('select[data-name=VAT]', 'change', function () {
+                refreshPrice($(this).closest('tr'));
+            });
+            $('#reject-price-buy-qoutation').click(function () {
+                var QoutationId = $('#Qoutation-id').text();
+                $.get('/QoutationDetail/AccountantRejectPriceBuy?qoutationId=' + QoutationId, function (response) {
+                    if (response.result == "success") {
+                        success('Thành công', function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        error(response.content);
+                    }
+                });
+            });
+
+            $('#save-price-sell-qoutation').click(function () {
+                $('tr input.error').removeClass('error');
+                var QoutationId = $('#Qoutation-id').text();
+                var products = [];
+                var canSubmit = true;
+                $('#mainTable tbody tr:not(:last-child)').each(function () {
+                    var product = {};
+                    product.ProductId = $(this).attr('data-product-id');
+
+                    product['UnitPrice'] = parseInt($(this).find('td[data-name=UnitPrice] input').val());
+                    product['VAT'] = parseFloat($(this).find('td[data-name=VAT] select').val());
+
+                    if (product['UnitPrice'] == 0) {
+                        if (canSubmit) {
+                            error('Đơn giá không được để trống');
+                        }
+                        $(this).find('td[data-name=UnitPrice] input').addClass('error');
+                        canSubmit = false;
+                    }
+
+                    products.push(product);
+                });
+
+                if (!canSubmit) {
+                    return;
+
+                }
+
+                $.post('/QoutationDetail/AccountantFillPriceSell',
+                    { QoutationId: QoutationId, Products: products }, function (response) {
+                        if (response.result == "success") {
+                            success('Sửa giá thành công', function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            error(response.content);
+                        }
+                    });
+
+            });
+        </script>
+    }
+
+    @if (Model.CanRejectQoutation)
+    {
+        <script>
+            @* trưởng phòng sale từ chối duyệt đơn *@
+            $('#reject-Qoutation-button').click(function () {
+                $('.reject-Qoutation').css('display', 'block');
+            });
+            $('#submit-dont-approve-Qoutation').click(function () {
+                var content = $('#content-reson').val();
+                if (content == null || content.trim() == '') {
+                    $('span.error-text').css('display', 'block');
+                    return;
+                }
+                content = content.trim();
+                $.post('/QoutationDetail/RejectQoutation',
+                    { QoutationId: $('#Qoutation-id').text(), Content: content }, function (response) {
+                        if (response.result == "success") {
+                            success('Hủy báo giá thành công', function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            //TODO Thêm thông báo hủy Qoutation thất bại
+                            error(response.content);
+                        }
+                    }).fail(function () {
+                        error('Có vấn đề về đường truyền!');
+                    });
+            });
+        </script>
+    }
+
+    @if (Model.CanApprovePriceByAccountingManager)
+    {
+        <script>
+            $('#button-approve-price').click(function () {
+                var QoutationId = $('#Qoutation-id').text();
+                var submitInput = {};
+                submitInput.QoutationId = QoutationId;
+                submitInput.ApproveType = "approve";
+                submitApprovePrice(submitInput);
+            });
+
+            $('#button-reject-price').click(function () {
+                var QoutationId = $('#Qoutation-id').text();
+                var submitInput = {};
+                submitInput.QoutationId = QoutationId;
+                submitInput.ApproveType = "reject";
+                submitApprovePrice(submitInput);
+            });
+
+            function submitApprovePrice(submitInput) {
+                $.post('/QoutationDetail/AccountingManagerApprovePrice', submitInput, function (response) {
+                    if (response.result == "success") {
+                        success('Duyệt giá thành công', function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        error(response.content);
+                    }
+                });
+
+            }
+        </script>
+    }
+
+    @if (Model.CanApprovePriceBySalesManager)
+    {
+        <script>
+            $('#button-approve-price').click(function () {
+                var QoutationId = $('#Qoutation-id').text();
+                var submitInput = {};
+                submitInput.QoutationId = QoutationId;
+                submitInput.ApproveType = "approve";
+                submitApprovePrice(submitInput);
+            });
+
+            $('#button-reject-price').click(function () {
+                var QoutationId = $('#Qoutation-id').text();
+                var submitInput = {};
+                submitInput.QoutationId = QoutationId;
+                submitInput.ApproveType = "reject";
+                submitApprovePrice(submitInput);
+            });
+
+            function submitApprovePrice(submitInput) {
+                $.post('/QoutationDetail/SalesManagerApprovePrice', submitInput, function (response) {
+                    if (response.result == "success") {
+                        success('Duyệt giá thành công', function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        error(response.content);
+                    }
+                });
+
+            }
+        </script>
+    }
+
+}

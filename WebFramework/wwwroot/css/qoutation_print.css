@@ -1,0 +1,208 @@
+﻿.layout-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.order-header {
+    background-color: #C4D79B;
+}
+
+.middle-align {
+    text-align: center;
+    width: 100%;
+}
+
+.company-infomation {
+    flex: 1;
+    margin: 10px;
+    background-color: white;
+    border: solid 2px;
+}
+
+.logo {
+    padding-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.order-client-infomation {
+    background-color: #FCD5B4;
+}
+
+.client-infomation {
+    padding: 5px;
+    flex: 1;
+    margin-right: -1px;
+}
+
+.order-staff-infomation {
+    padding: 5px;
+    flex: 1;
+    border: solid 1px;
+}
+
+.company-infomation ul {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.order-explan {
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+
+.order-products span {
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    padding: 5px;
+    /* Safari/Chrome, other WebKit */
+    /* Firefox, other Gecko */
+    /* Opera/IE 8+ */
+    /* Safari/Chrome, other WebKit */
+    /* Firefox, other Gecko */
+    /* Opera/IE 8+ */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+.table-title {
+    background-color: #8DB4E2;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.total-price > span {
+    flex: 1;
+}
+
+.order-payment-method {
+    padding: 20px 0px;
+}
+
+.order-signature > div {
+    flex: 1;
+}
+
+    .order-signature > div > div:last-child {
+        margin-top: 100px;
+        font-weight: bold;
+    }
+
+    .order-signature > div > div {
+        text-align: center;
+    }
+
+ul.table-header, ul.table-footer, ul.table-row {
+    padding: 0 !important;
+    margin: 0;
+    list-style: none;
+}
+
+.image-row > img {
+    object-fit: scale-down;
+    width: 100%;
+}
+
+ul.table-header > li, .table-row > li, ul.table-footer > li {
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    padding: 5px; /* Safari/Chrome, other WebKit */ /* Firefox, other Gecko */ /* Opera/IE 8+ */
+    /* Safari/Chrome, other WebKit */
+    /* Firefox, other Gecko */
+    /* Opera/IE 8+ */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+    ul.table-header > li:first-child, .table-row > li:first-child, ul.table-footer > li:first-child {
+        border-left: solid 1px;
+    }
+
+ul.table-footer > li {
+    height: 35px;
+}
+
+.order-products span:first-child {
+    border-left: solid 1px;
+    margin-right: 6px;
+    border-top: solid 1px;
+}
+
+ul.table-footer > li {
+    border-color: transparent;
+    border-bottom-color: black;
+}
+
+    ul.table-footer > li:nth-child(7) {
+        border-right-color: black;
+    }
+
+    ul.table-footer > li:last-child {
+        border-right-color: black;
+    }
+
+ul.table-header > li {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+li[data-property="Decription"] {
+    text-align: justify;
+}
+
+.Qoutation-header.layout-horizontal {
+    background: #c4d79b;
+}
+
+.Qoutation-client-infomation.layout-horizontal {
+    background: #fcd5b4;
+    border: 1px solid black;
+}
+
+.Qoutation-staff-infomation {
+    padding-left: 20px;
+    border-left: solid 1px;
+}
+
+ul.table-row.layout-horizontal li {
+    font-size: 12px;
+}
+
+
+aside#left-sidebar-nav {
+    display: none;
+}
+
+#main.main-full {
+    padding-left: 0px;
+}
+
+#print-pdf > div > div.Qoutation-header.layout-horizontal > div.company-infomation > div.middle-align > h5 > b {
+    color: green;
+}
+
+.logo > img {
+    object-fit: cover;
+    height: 100%;
+}
+
+.company-infomation {
+    font-size: 12px;
+}
+
+#print-pdf > div > div.Qoutation-header.layout-horizontal > div.company-infomation > div.middle-align > h5 > b {
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+#print-pdf > div > div.Qoutation-header.layout-horizontal > div.company-infomation > div.middle-align > h5 {
+    margin-block-end: -10px;
+}

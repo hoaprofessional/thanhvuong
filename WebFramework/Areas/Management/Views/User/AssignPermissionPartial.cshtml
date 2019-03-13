@@ -1,0 +1,58 @@
+﻿@using WebCore.Services.Share.Commons.Permissions.Dto
+@model WebFramework.Areas.Management.Models.UserAssignPermissionViewModel
+@{
+    Model.TreeViewPermission.Name = "Chọn tất cả";
+}
+@using WebFramework.Areas.Management.Helper
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Phân quyền</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title">Nhóm quyền</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="role-area" class="roles">
+                                @foreach (var item in Model.AllRoles)
+                                {
+                                    <div class="checkbox checkbox-info">
+                                        <input id="cbk-@item.RoleName" type="checkbox" value="@item.RoleName" checked="@item.IsChecked" />
+                                        <label for="cbk-@item.RoleName">
+                                            @Html.DictionaryFor(item.RoleName)
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title">Quyền</h4>
+                        </div>
+                        <div class="card-body">
+                            <treeview id="permission-area" 
+                                        treeview-model="Model.TreeViewPermission" 
+                                        treeview-isrenderrootnode="true"
+                                        treeview-partialview-child="~/Areas/Management/Views/User/PermissionTreeItemPartial.cshtml"></treeview>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            <button type="button" onclick="savePermission('@ViewBag.UserId')" class="btn btn-primary">Lưu</button>
+        </div>
+    </div>
+</div>

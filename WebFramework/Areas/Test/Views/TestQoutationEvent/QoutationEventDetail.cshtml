@@ -1,0 +1,11 @@
+﻿@model System.Collections.Generic.List<Framework.DTOs.Areas.Test.QoutationEventDto>
+@{
+    ViewData["Title"] = "QoutationEventDetail";
+}
+
+<h2>QoutationEventDetail</h2>
+
+@foreach(var item in Model)
+{
+<p>Nhân viên tạo: @item.StaffName <br />  Thời gian thực hiện @item.Time.Value.ToString("dd/MM/yyyy hh:mm") <br />  Số phút xử lý @item.ProcessTime <br /> Nội dung @item.Content <br /></p>
+}

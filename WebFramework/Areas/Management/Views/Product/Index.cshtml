@@ -1,0 +1,315 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+@model WebFramework.Areas.Management.Models.ProductViewModel
+
+<div class="main-panel">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="inputForm" novalidate action="/Management/Product/SubmitInput" class="forms-sample">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Sản phẩm</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="AddProductId">Mã sản phẩm (*)</label>
+                                            <input required type="text" name="Id" class="form-control" id="AddId" placeholder="Nhập mã sản phẩm">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="AddProductName">Tên sản phẩm (*)</label>
+                                            <input required type="text" class="form-control" id="AddProductName" name="Name" placeholder="Nhập tên sản phẩm">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="AddSize">Kích thước (*)</label>
+                                            <input required type="text" name="Size" class="form-control" id="AddSize" placeholder="Nhập kích thước">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="AddUnit">Đơn vị tính (*)</label>
+                                            <input required type="text" class="form-control" id="AddUnit" name="Unit" placeholder="Nhập đơn vị tính">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="AddImage">Hình ảnh</label>
+                                        <input id="AddImage" accept=".gif,.jpg,.jpeg,.png" type="file" name="Files" multiple />
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-md-12" for="AddDecription">Mô tả sản phẩm</label>
+                                        <textarea rows="10" class="col-md-12" id="AddDecription" name="Decription"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success mr-2">Lưu</button>
+                        <button id="cancelSubmit" type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Tìm kiếm</h4>
+            <form id="form-filter" action="/Management/Product/SaveFilter" class="forms-sample">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="ProductName">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="ProductName" value="@Model.FilterModel.ProductName" name="ProductName" placeholder="Nhập tên sản phẩm">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="ProductId">Mã sản phẩm</label>
+                            <input type="text" name="ProductId" class="form-control" value="@Model.FilterModel.ProductId" id="ProductId" placeholder="Nhập mã sản phẩm">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="ProductId">Hiển thị</label>
+                            <select name="ViewMode" id="view-mode" class="form-control">
+                                <option value="@Constant.ViewMode.Active">Hiển thị những dòng được kích hoạt</option>
+                                <option value="@Constant.ViewMode.Deleted">Hiển thị những dòng bị xóa</option>
+                                <option value="@Constant.ViewMode.All">Hiển thị tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success mr-2">Tìm kiếm</button>
+                <button type="button" id="refresh" class="btn btn-info btn-fw">
+                    Làm mới
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div style="display:flex;" class="card-body">
+                <button style="margin-right:20px;" data-toggle="modal" id="openModal" data-target="#myModal" class="btn btn-success">
+                    Thêm mới
+                    <i class="mdi mdi-plus"></i>
+                </button>
+                <button style="margin-right:20px;" type="button" class="btn btn-info btn-fw">
+                    <i class="mdi mdi-upload"></i>Import Excel
+                </button>
+                
+            </div>
+        </div>
+    </div>
+    <div style="overflow:auto">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <span style="width:150px">
+                            Hành động
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Mã sản phẩm
+                        </span>
+                    </th>
+                    <th>
+                        <span style="width:150px;">
+                            Tên sản phẩm
+                        </span>
+                    </th>
+                    <th>
+                        <span style="width:300px;">
+                            Mô tả sản phẩm
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Kích thước
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Đơn vị
+                        </span>
+                    </th>
+                    <th>
+                        <span style="width:200px;text-align:center;">
+                            Hình ảnh
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="partialMainList">
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            @if (product.Active == true)
+                            {
+                                <select data-id="@product.Id" onchange="onAction(value,this)" class="form-control">
+                                    <option value="none">
+                                        Chọn hành động
+                                    </option>
+                                    <option value="update">
+                                        Sửa
+                                    </option>
+                                    <option value="delete">
+                                        Xóa
+                                    </option>
+                                </select>
+                            }
+                            else
+                            {
+                                <button data-id="@product.Id" onclick="restoreProduct(this)" class="btn btn-info">
+                                    Khôi phục
+                                </button>
+                            }
+                        </td>
+                        <td class="getvalue"
+                            data-name="Id"
+                            data-value="@product.Id">
+                            @product.Id
+                        </td>
+                        <td class="getvalue"
+                            data-name="Name"
+                            data-value="@product.Name">
+                            @product.Name
+                        </td>
+                        <td class="getvalue"
+                            data-name="Decription"
+                            data-value="@product.Decription">
+                            @Html.Raw(product.Decription)
+                        </td>
+                        <td class="getvalue"
+                            data-name="Size"
+                            data-value="@product.Size">
+                            @product.Size
+                        </td>
+                        <td class="getvalue"
+                            data-name="Unit"
+                            data-value="@product.Unit">
+                            @product.Unit
+                        </td>
+                        <td class="getvalue" style="text-align:center;">
+                            <img src="@product.Images" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <pager class="pager-container" list="@Model.Products" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index" asp-controller="Product" />
+            </tfoot>
+        </table>
+    </div>
+    <pager class="pager-container" list="@Model.Products" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index" asp-controller="Product" />
+    
+</div>
+
+@section scripts{
+
+    <script>
+        $('#view-mode').val('@Model.FilterModel.ViewMode')
+        $('#refresh').click(function () {
+            $('#form-filter input').val('');
+            $('#form-filter').submit();
+        });
+
+        $("#inputForm").validify({
+            onSubmit: function (e, $this) {
+                e.preventDefault();
+                var formData = new FormData($this[0]);
+                var url = $this.attr('action');
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        if (response == "success") {
+                            alertify.success("Thành công");
+                            location.reload();
+                        }
+                        else {
+                            alertify.error("Thất bại");
+                        }
+                    }
+                });
+            },
+            onFormSuccess: function (form) {
+                console.log("Form is valid now!")
+            },
+            onFormFail: function (form) {
+            }
+        });
+
+
+        $('#cancelSubmit').click(function () {
+            $('#AddId').removeProp('disabled');
+            $('#inputForm input').val('');
+            $('#inputForm textarea').val('');
+        });
+
+        function onAction(action, elem) {
+            switch (action) {
+                case 'update':
+                    updateProduct(elem);
+                    $(elem).val('none');
+                    break;
+                case 'delete':
+                    $.get(`/Management/Product/DeleteProduct?id=${$(elem).attr('data-id')}`).done(function (response) {
+                        if (response == "success") {
+                            $(elem).closest('tr').remove();
+                        }
+                    });
+                default:
+                    break;
+            }
+        }
+
+        function restoreProduct(elem) {
+            $.get(`/Management/Product/RestoreProduct?id=${$(elem).attr('data-id')}`).done(function (response) {
+                if (response == "success") {
+                    $(elem).closest('tr').remove();
+                }
+            });
+        }
+
+
+        function updateProduct(select) {
+            $(select).closest('tr').find('td.getvalue').each(function () {
+                $(`#inputForm input[name=${$(this).attr("data-name")}]`).val($(this).attr("data-value"));
+                $(`#inputForm textarea[name=${$(this).attr("data-name")}]`).val($(this).attr("data-value"));
+            });
+            $('#openModal').click();
+            $('#AddId').prop('readonly', 'readonly');
+        }
+
+    </script>
+}

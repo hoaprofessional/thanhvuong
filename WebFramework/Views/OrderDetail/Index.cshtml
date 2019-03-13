@@ -1,0 +1,898 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.OrderDetailViewModel.OrderDetailIndexViewModel
+@{
+    int no = 1;
+}
+
+<style>
+    .invoce-company-contact.right-align {
+        display: block;
+    }
+
+        .invoce-company-contact.right-align > a {
+            padding: 0px !important;
+            display: inline-block;
+            width: 48%;
+            margin-bottom: 10px;
+        }
+
+    .btn-large i {
+        margin-right: 20px;
+    }
+</style>
+
+<input type="hidden" id="order-id" value="@Model.Order.Id">
+
+<div class="container">
+    <div id="invoice">
+        <div class="invoice-header">
+            <div class="row section">
+                <div class="col s12 m6 l6">
+                    <img src="/images/company.png" alt="company logo">
+                    <p>
+                        Gửi khách hàng,
+                        <br />
+                        <span class="strong">@Model.Order.Client.Name</span>
+                        <br />
+                        <span>Địa chỉ : @Model.Order.Client.Address</span>
+                        <br />
+                        <span>Số điện thoại: @Model.Order.Client.PhoneNumber</span>
+                    </p>
+                    @if (Model.CanReceiveMoney)
+                    {
+                        <div class="note-area input-field">
+                            <textarea id="note-price" name="note" class="materialize-textarea"></textarea>
+                            <label for="note-price">Ghi chú</label>
+                            <a id="save-note" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> LƯU GHI CHÚ
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="col s12 m6 l6">
+                    <div class="invoce-company-address right-align" style="padding: 5px 0px;">
+                        <p>
+                            <span class="strong">Công ty @Model.CommonConfiguration.CompanyName</span>
+                            <br />
+                            <span>@Model.CommonConfiguration.HeadQuarter</span>
+                            <br />
+                            <span>Liên hệ: @Model.CommonConfiguration.Contact</span>
+                            <br />
+                            <span>Hotline: @Model.CommonConfiguration.Hotline</span>
+                        </p>
+                    </div>
+                    <div class="qoutation-infomation right-align">
+                        <p>
+                            <span>Ngày tạo: @Model.Order.CreationTime.Value.ToString("dd/MM/yyyy hh:mm")</span>
+                            <br />
+                            @if (Model.Order.ExpectedReturnGoodDate == null)
+                            {
+                                <span>Chưa có ngày dự kiến hàng về</span>
+                            }
+                            else
+                            {
+                                <span>Ngày dự kiến hàng về: @Model.Order.ExpectedReturnGoodDate.Value.ToString("dd/MM/yyyy")</span>
+                            }
+                            <br />
+                            @if (Model.Order.ExpectedDeliveryDate == null)
+                            {
+                                <span>Chưa có ngày dự kiến giao hàng</span>
+                            }
+                            else
+                            {
+                                <span>Ngày dự kiến giao hàng: @Model.Order.ExpectedDeliveryDate.Value.ToString("dd/MM/yyyy")</span>
+                            }
+                            <br />
+                            <span>Người tạo: @Model.Order.CreationStaff.Name</span>
+                            <br />
+                            <span>Trạng thái: @Model.Order.OrderStatus.Name</span>
+                            <br />
+                            <span>Ghi chú: <span id="note"> @Model.Order.Note</span></span>
+                            @if (@Model.Order.OrderStatusId == "client_dept")
+                            {
+                                <br />
+                                <span>Số tiền nợ: @Model.Order.RemainingPrice.ToString("0,000")</span>
+                            }
+                        </p>
+                    </div>
+
+                    <div class="invoce-company-contact right-align">
+                        @if (Model.CanConfirmOrder)
+                        {
+                            <a id="button-manager-confirm" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> XÁC NHẬN ĐƠN HÀNG
+                            </a>
+                            <a id="button-manager-reject" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> TỪ CHỐI
+                            </a>
+                        }
+
+                        @if (Model.CanApproveAlreadyCreatedOrder)
+                        {
+                            <a id="button-manager-approve" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> PHÊ DUYỆT
+                            </a>
+                            <a id="button-manager-reject" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> TỪ CHỐI
+                            </a>
+                        }
+                        @if (Model.CanAccountantHasOrdered)
+                        {
+                            <a id="submit-button" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> YÊU CẦU ĐẶT HÀNG
+                            </a>
+                        }
+                        @if (Model.CanChangeExpectedReturnGoodDate)
+                        {
+                            <div>
+                                <p class="strong">Ngày dự kiến hàng về:</p>
+                                <input style="width:300px;text-align:right;" id="expectedGoodReturnDate" type="text" class="datepicker">
+                            </div>
+                            <a id="button-order" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> Cập nhật ngày
+                            </a>
+                        }
+                        @if (Model.CanAccountingManagerApprove)
+                        {
+                            <a id="button-manager-approve" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> PHÊ DUYỆT
+                            </a>
+                            <a id="button-manager-reject" class="waves-effect waves-light btn-large gradient-45deg-red-pink">
+                                <i class="material-icons right">done</i> TỪ CHỐI
+                            </a>
+                        }
+
+                        @if (Model.CanUpdateGoodOnWay)
+                        {
+                            <a id="button-submit" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> HÀNG ĐANG TRÊN ĐƯỜNG VỀ
+                            </a>
+                        }
+
+                        @if (Model.CanUpdateReadyToDeliver)
+                        {
+                            <a id="button-submit" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i>HÀNG SẴN SÀNG GIAO
+                            </a>
+                        }
+
+                        @if (Model.CanRecommendedDelivery)
+                        {
+                            <a id="button-submit" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i>ĐỀ NGHỊ GIAO HÀNG
+                            </a>
+                        }
+
+                        @if (Model.CanTechnicalChiefApproveOrder)
+                        {
+                            <div>
+                                <p class="strong">Ngày dự kiến giao hàng:</p>
+                                <input style="width:300px;text-align:right;" id="expectedDeliverDate" type="text" class="datepicker">
+                            </div>
+
+                            <a id="button-submit-date" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i>Cập nhật ngày
+                            </a>
+                        }
+
+                        @if (Model.CanFinishDelivery)
+                        {
+                            <a id="button-submit" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i>GIAO HÀNG XONG
+                            </a>
+                        }
+
+                        @if (Model.CanReceiveMoney)
+                        {
+                            <div>
+                                <p class="strong">Tổng tiền:</p>
+                                <label data-value="@Model.Order.TotalPrice" id="total-price">@Model.Order.TotalPrice.ToString("0,000") đ</label>
+                            </div>
+                            <div>
+                                <p class="strong">Đã trả:</p>
+                                <label data-value="@Model.Order.PaidPrice" id="has-paid-price">@Model.Order.PaidPrice.ToString("0,000") đ</label>
+                            </div>
+                            <div>
+                                <p class="strong">Số tiền trả thêm:</p>
+                                <input min="0" style="width:300px;text-align:right;" id="paid-price" type="text">
+                            </div>
+                            <div>
+                                <p class="strong">Còn lại:</p>
+                                <label id="remaining-price">@Model.Order.RemainingPrice.ToString("0,000") đ</label>
+                            </div>
+                            <a id="button-receive" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> THU TIỀN
+                            </a>
+                        }
+
+                        @if (Model.CanChangeQuantityProduct)
+                        {
+                            <a id="button-save" class="waves-effect waves-light btn-large gradient-45deg-green-teal">
+                                <i class="material-icons right">done</i> LƯU
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-lable gradient-45deg-green-teal">
+            <div class="row">
+                <div class="col s12 m3 l3">
+                    <h4 class="white-text invoice-text" style="padding-left: 20px;">ĐƠN ĐẶT HÀNG</h4>
+                </div>
+                <div class="col s12 m9 19 invoice-brief white-text">
+                    <div class="row">
+                        <div class="col s12 m2 l2">
+                            <p class="strong">Tổng cộng</p>
+                            <h4 class="header total-all-price">@Html.Raw(((decimal)Model.Order.TotalPrice + Model.Order.Promotion).ToString("0,000")) đ</h4>
+                        </div>
+                        <div class="col s12 m2 l2">
+                            <p class="strong">Giảm giá</p>
+                            <h4 class="header total-all-price">@Model.Order.Promotion.ToString("0,000") đ</h4>
+                        </div>
+                        <div class="col s12 m2 l2">
+                            <p class="strong">Thành tiền</p>
+                            <h4 class="header total-all-price">@Model.Order.TotalPrice.ToString("0,000") đ</h4>
+                        </div>
+                        <div class="col s12 m2 l2">
+                            <p class="strong">Số báo giá</p>
+                            <h4 id="Qoutation-id" class="header">@Model.Order.QoutationId</h4>
+                        </div>
+                        <div class="col s12 m2 l2">
+                            <p class="strong">Ngày xuất</p>
+                            <h4 class="header">@Model.Order.CreationTime.Value.ToString("dd/MM/yyyy")</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-table">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <table class="striped float" id="mainTable">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="5%">Mã sản phẩm</th>
+                                <th width="10%">Sản phẩm</th>
+                                <th width="15%">Mô tả</th>
+                                <th width="5%">ĐVT</th>
+                                <th width="5%">Kích thước</th>
+                                <th width="15%">Ghi chú</th>
+                                <th width="10%">Đơn giá</th>
+                                <th width="5%">VAT</th>
+                                <th width="5%">Số lượng</th>
+                                <th width="10%">Tổng</th>
+                                <th width="10%" class="center">Hình ảnh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderDetail in Model.Order.OrderDetails)
+                            {
+                                <tr class="tr-data" data-product-id="@orderDetail.ProductId">
+                                    <td class="not-edit">@no</td>
+                                    <td class="not-edit">@orderDetail.Product.Id</td>
+                                    <td class="not-edit">@orderDetail.Product.Name</td>
+                                    <td class="not-edit">@Html.Raw(orderDetail.ProductDetail)</td>
+                                    <td class="not-edit">@orderDetail.ProductUnit</td>
+                                    <td class="not-edit">@orderDetail.ProductSize</td>
+                                    <td class="not-edit">@Html.Raw(orderDetail.ProductNote)</td>
+                                    @if (Model.CanChangeQuantityProduct)
+                                    {
+                                        <td data-name="UnitPrice" class="not-edit">
+                                            <input type="number" data-name="UnitPrice" min="0" value="@orderDetail.UnitPrice" />
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="not-edit unit">@orderDetail.UnitPrice.ToString("0,000") đ</td>
+                                    }
+                                    <td class="not-edit vat">@Html.Raw(Math.Round(orderDetail.VAT * 100))%</td>
+                                    @if (Model.CanChangeQuantityProduct)
+                                    {
+                                        <td data-name="ProductQuantity" class="not-edit">
+                                            <input type="number" data-name="ProductQuantity" min="0" value="@orderDetail.ProductQuantity" />
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td data-name="ProductQuantity" class="not-edit">@orderDetail.ProductQuantity</td>
+                                    }
+                                    <td data-name="TotalPrice" class="not-edit">@orderDetail.TotalPrice.ToString("0,000") đ</td>
+                                    <td class="not-edit"><img src="@orderDetail.Product.Images" /></td>
+                                </tr>
+                                no++;
+                            }
+                            <tr>
+                                <td colspan="10" class="not-edit"></td>
+                                <td class="green white-text not-edit">Tổng cộng</td>
+                                <td class="total-all-price green strong white-text not-edit unborder-left">@Html.Raw(((decimal)Model.Order.TotalPrice + Model.Order.Promotion).ToString("0,000")) đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+
+
+    @if (Model.CanConfirmOrder)
+    {
+        <script>
+            var obj = new (class ManagerConfirm {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonManagerConfirm = $('#button-manager-confirm')
+                    this.$buttonManagerReject = $('#button-manager-reject');
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/ConfirmOrder"
+                    this.$approveString = "approve"
+                    this.$rejectString = "reject"
+
+                    var $t = this;
+
+                    this.$buttonManagerConfirm.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = $t.$approveString;
+                        $t.$approveOrder(orderInput);
+                    });
+                    this.$buttonManagerReject.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = $t.$rejectString;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanApproveAlreadyCreatedOrder)
+    {
+        <script>
+            var obj = new (class CanConfirmOrder {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonManagerApprove = $('#button-manager-approve')
+                    this.$buttonManagerReject = $('#button-manager-reject')
+                    this.$orderId = $('#order-id').val()
+                    this.$approveString = "approve"
+                    this.$rejectString = "reject"
+                    this.$link = "/OrderDetail/ApproveAlreadyCreatedOrder"
+
+                    var $t = this;
+
+                    this.$buttonManagerApprove.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = $t.$approveString;
+                        $t.$approveOrder(orderInput);
+                    });
+                    this.$buttonManagerReject.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = $t.$rejectString;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanAccountantHasOrdered)
+    {
+        <script>
+            var obj = new (class Order {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $accountantHasOrdered(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#submit-button')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/AccountantHasOrdered"
+
+                    var $t = this;
+
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$accountantHasOrdered(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanChangeExpectedReturnGoodDate)
+    {
+        <script>
+            var obj = new (class Order {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $accountantHasOrdered(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-order')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/ChangeExpectedReturnGoodDate"
+                    this.$expectedReturnGoodDate = $('#expectedGoodReturnDate');
+
+                    var $t = this;
+
+                    this.$buttonSubmit.click(function () {
+                        if ($t.$expectedReturnGoodDate.val() == null ||
+                            $t.$expectedReturnGoodDate.val() == '') {
+                            $t.$expectedReturnGoodDate.addClass('error');
+                            error('Ngày dự kiến không được để trống!');
+                            return;
+                        }
+                        var expectedReturnGoodDate = new Date(fixDateString($t.$expectedReturnGoodDate.val()));
+                        if (expectedReturnGoodDate < new Date()) {
+                            $t.$expectedReturnGoodDate.addClass('error');
+                            error('Ngày dự kiến không được nhỏ hơn hôm nay!');
+                            return;
+
+                        }
+
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ExpectedReturnGoodDate = fixDateString($t.$expectedReturnGoodDate.val());
+                        $t.$accountantHasOrdered(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanAccountingManagerApprove)
+    {
+
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonManagerApprove = $('#button-manager-approve')
+                    this.$buttonManagerReject = $('#button-manager-reject');
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/AccoutingManagerApprove"
+                    var $t = this;
+                    this.$buttonManagerApprove.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = "approve";
+                        $t.$approveOrder(orderInput);
+                    });
+                    this.$buttonManagerReject.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.ApproveType = "reject";
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanUpdateGoodOnWay)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-submit')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/UpdateGoodOnWay"
+                    var $t = this;
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanUpdateReadyToDeliver)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-submit')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/UpdateReadyToDeliver"
+                    var $t = this;
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanRecommendedDelivery)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-submit')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/UpdateRecommendedDelivery"
+                    var $t = this;
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanTechnicalChiefApproveOrder)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    var expectedDeliverDate = $('#expectedDeliverDate');
+
+                    if (expectedDeliverDate.val() == null ||
+                        expectedDeliverDate.val() == '') {
+                        expectedDeliverDate.addClass('error');
+                        error('Ngày dự kiến không được để trống!');
+                        return;
+                    }
+                    var expectedDate = new Date(fixDateString(expectedDeliverDate.val()));
+                    if (expectedDate < new Date()) {
+                        expectedDeliverDate.addClass('error');
+                        error('Ngày dự kiến không được nhỏ hơn hôm nay!');
+                        return;
+
+                    }
+                    orderInput.ExpectedDeliveryDate = fixDateString(expectedDeliverDate.val());
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-submit-date')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/TechnicalChiefApproveOrder"
+                    var $t = this;
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanChangeQuantityProduct)
+    {
+        <script>
+            function refreshPrice() {
+                var total = 0;
+                $('.tr-data').each(function () {
+                    var totalElem = $(this).find('td[data-name="TotalPrice"]');
+                    var vatElem = $(this).find('.vat');
+                    var unitElem = $(this).find('.unit');
+                    var quantity = $(this).find('td[data-name="ProductQuantity"] input').val();
+                    var unitValue = $(this).find('td[data-name="UnitPrice"] input').val();
+                    var vatValue = parseInt(vatElem.text().replace('%', '')) / 100.0;
+                    var moneyStr = ((unitValue + vatValue * unitValue) * quantity).formatMoney();
+                    moneyStr = moneyStr.substr(0, moneyStr.indexOf('.'));
+                    totalElem.text(moneyStr + ' đ');
+                    var price = parseInt(fixPrice($(totalElem).text()));
+                    total += price;
+                });
+                var money = total.formatMoney();
+                money = money.substr(0, money.indexOf('.'));
+                $('.total-all-price').text(money + ' đ');
+            }
+            $('input[data-name="ProductQuantity"]').on('keyup', function () {
+                refreshPrice();
+            });
+            $('input[data-name="UnitPrice"]').on('keyup', function () {
+                refreshPrice();
+            });
+            $('#button-save').click(function () {
+                var obj = {};
+                obj.OrderId = $('#order-id').val();
+                obj.Products = [];
+                $('.tr-data').each(function () {
+                    var product = {};
+                    product.ProductId = $(this).attr('data-product-id');
+                    product.Quantity = $(this).find('input[data-name="ProductQuantity"]').val();
+                    product.UnitPrice = $(this).find('input[data-name="UnitPrice"]').val();
+                    obj.Products.push(product);
+                });
+
+                $.post('/OrderDetail/AccountantChangeQuantityProduct', obj, function (response) {
+                    if (response.result == "success") {
+                        success("Thành công", function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        error(response.content);
+                    }
+                });
+
+            });
+        </script>
+
+    }
+
+    @if (Model.CanFinishDelivery)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $approveOrder(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonSubmit = $('#button-submit')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/FinishDelivery"
+                    var $t = this;
+                    this.$buttonSubmit.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        $t.$approveOrder(orderInput);
+                    });
+                }
+            })();
+        </script>
+    }
+
+    @if (Model.CanReceiveMoney)
+    {
+        <script>
+            var obj = new (class ManagerApprove {
+                $submitSuccess(message) {
+                    success(message, function () {
+                        location.reload();
+                    });
+                }
+                $submitNote(saveNoteInput) {
+                    var $t = this;
+                    $.post(this.$saveNoteLink, saveNoteInput)
+                        .done(function (response) {
+                            if (response.result == "success") {
+                                $('#note').text(saveNoteInput.Note);
+                                $t.$notePrice.val('');
+                                success("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        }).
+                        fail(function () {
+                            error("Có vấn đề về đường truyền")
+                        })
+
+                }
+                $receiveMoney(orderInput) {
+                    var $t = this;
+                    $.post(this.$link, orderInput,
+                        function (response) {
+                            if (response.result == "success") {
+                                $t.$submitSuccess("Thành công");
+                            }
+                            else {
+                                error(response.content);
+                            }
+                        });
+                }
+                constructor() {
+                    this.$buttonReceive = $('#button-receive')
+                    this.$buttonDept = $('#button-dept')
+                    this.$buttonSaveNote = $('#save-note')
+                    this.$totalPrice = parseInt($('#total-price').attr('data-value'))
+                    this.$paidPriceElem = $('#paid-price')
+                    this.$hasPaidPrice = parseInt($('#has-paid-price').attr('data-value'));
+                    this.$remainingPrice = $('#remaining-price')
+                    this.$orderId = $('#order-id').val()
+                    this.$link = "/OrderDetail/ReceiveMoney"
+                    this.$saveNoteLink = "/OrderDetail/ChangeNote"
+                    this.$notePrice = $('#note-price');
+
+                    var $t = this;
+
+                    this.$paidPriceElem.on('keyup', function () {
+                        var paidPrice = $t.$paidPriceElem.val();
+                        var remainingPrice = $t.$totalPrice - paidPrice - $t.$hasPaidPrice;
+                        if (remainingPrice < 0) {
+                            $t.$paidPriceElem.val($t.$totalPrice - $t.$hasPaidPrice);
+                            $t.$remainingPrice.text("0 đ");
+                        }
+                        else {
+                            var remainingPriceString = remainingPrice.formatMoney();
+                            remainingPriceString = remainingPriceString.substr(0, remainingPriceString.indexOf("."))
+                            $t.$remainingPrice.text(remainingPriceString + " đ");
+                        }
+                    });
+                    this.$buttonReceive.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.PaidPrice = $t.$paidPriceElem.val();
+                        $t.$receiveMoney(orderInput);
+                    });
+
+                    this.$buttonSaveNote.click(function () {
+                        var orderInput = {};
+                        orderInput.OrderId = $t.$orderId;
+                        orderInput.Note = $t.$notePrice.val();
+                        if (orderInput.Note == null || orderInput.Note == '') {
+                            error('Ghi chú không được để trống');
+                            return;
+                        }
+
+                        $t.$submitNote(orderInput);
+
+                    });
+                }
+            })();
+        </script>
+    }
+
+}

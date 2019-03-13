@@ -1,0 +1,541 @@
+﻿@model WebFramework.Models.TaskManagement.WorkManagement.WorkListIndexViewModel
+
+<style>
+    #tasks td.action .save-row {
+        display: none;
+    }
+
+    #tasks td.action a {
+        cursor: pointer;
+    }
+
+    #tasks tr.editing td.action .save-row {
+        display: initial;
+    }
+
+    #tasks tr.editing .row-display {
+        display: none;
+    }
+
+    #tasks tr.editing .edit-row {
+        display: none;
+    }
+
+
+    #tasks .row-edit {
+        display: none;
+    }
+
+    #tasks tr.editing .row-edit {
+        display: block;
+    }
+
+
+    /*input.row-edit:focus, .editing .select-wrapper.row-edit:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    input.row-edit, .editing .select-wrapper.row-edit {
+        border: solid 1px #c0c2cc !important;
+        border-radius: 5px !important;
+        padding-left: 10px !important;
+        outline: none;
+    }*/
+</style>
+
+<select id="priority-color" style="display:none">
+    @foreach (var priority in Model.Priorities)
+    {
+        <option data-name="@priority.Name"
+                data-id="@priority.Id"
+                data-color="@priority.Color"></option>
+    }
+</select>
+
+<aside id="right-sidebar-nav">
+    <ul id="chat-out" class="side-nav rightside-navigation">
+        <li class="li-hover">
+            <div class="row">
+                <div class="col s12 border-bottom-1 mt-5">
+                    <ul class="tabs">
+                        <li class="tab col s4">
+                            <a href="#all" class="active">
+                                <span class="material-icons">dashboard</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#undone">
+                                <span class="material-icons">highlight_off</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#done">
+                                <span class="material-icons">check_circle</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="all" class="col s12">
+                    <div class="flex align justify">
+                        <h6 class="mt-5 mb-3 ml-3">Toàn bộ công việc</h6>
+                        <a href="works.html" class="flex align justify">
+                            <i class="material-icons">more_horiz</i>
+                        </a>
+                    </div>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="undone" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc chưa hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="done" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc đã hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</aside>
+<!-- END RIGHT SIDEBAR NAV-->
+
+<section id="content">
+    <div class="container">
+        <div class="section">
+            <div class="col s12">
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-header gradient-45deg-light-blue-cyan">
+                        <div class="row flex align">
+                            <div class="col s10 m6 l6">
+                                <h4 class="task-card-title">Công việc</h4>
+                                <p class="task-card-date">@DateTime.Today.ToString("dd/MM/yyyy")</p>
+                            </div>
+
+                            <div class="col s2 m6 l6">
+
+                            </div>
+                            @if (Model.HasPermission(PermissionValue.AssignTask))
+                            {
+                                <a href="/CreateWork" class="btn-flat waves-effect white-text right">
+                                    <i class="material-icons right">add</i> THÊM MỚI
+                                </a>
+                            }
+
+                            <div class="col s2 m6 l6">
+                                <a id="open-filter-button" data-href="filter" class="btn-flat waves-effect white-text right">
+                                    <i class="material-icons right">filter_list</i> LỌC
+                                </a>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="filter-area" data-page="filter">
+                        <button id="filter-button" class="collapsible">Filter</button>
+                        <div class="collapsible-content flex-column-res">
+                            <div class="filter-item number-shows" name="NumberItemPerPage">
+                                <div>
+                                    <p class="label">
+                                        Hiển thị
+                                    </p>
+                                    <select name="data-table-simple_length" aria-controls="data-table-simple" class="initialized" data-select-id="d3a5c8e3-5101-9093-cba6-427b90d345cf">
+                                        @foreach (var numberShowPage in Model.NumbersShowPage)
+                                        {
+                                            <option value="@numberShowPage">@numberShowPage dòng</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-item" name="CreateByFilters">
+                                <div>
+                                    <p class="label">
+                                        Người tạo
+                                    </p>
+                                    <select name="data-table-simple_length" aria-controls="data-table-simple" class="initialized" data-select-id="d3a5c8e3-5101-9093-cba6-427b90d345cf">
+                                        <option value="">Tất cả</option>
+                                        @foreach (var createByFilter in Model.CreateByFilters)
+                                        {
+                                            <option value="@createByFilter.UserName">@createByFilter.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-item" name="CreateTimeFilters">
+                                <div>
+                                    <p class="label">
+                                        Ngày bắt đầu
+                                    </p>
+                                    <input style="cursor:pointer;" id='date' type='text' class='datepicker'>
+                                </div>
+                            </div>
+
+                            <div class="filter-item" name="StatusFilter">
+                                <div>
+                                    <p class="label">
+                                        Trạng thái
+                                    </p>
+                                    <select name="data-table-simple_length" aria-controls="data-table-simple" class="initialized" data-select-id="d3a5c8e3-5101-9093-cba6-427b90d345cf">
+                                        <option value="">Tất cả</option>
+                                        @foreach (var workStatus in Model.WorkStatusesFilters)
+                                        {
+                                            <option value="@workStatus.Id">@workStatus.Decription</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                    <li id="table-space" class="collection-header">
+                        @* table - space *@
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="modalfix" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4>Danh sách task</h4>
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-item">
+                        <input type="checkbox" id="task1" />
+                        <label for="task1">
+                            Check the new Mockup of ABC.
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat green lighten-1 gradient-shadow">Thấp</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat yellow darken-3 gradient-shadow">Trung bình</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat red lighten-1 gradient-shadow">Cao</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@*<div class="update-popup-section">
+        <div class="sweet-overlay" tabindex="-1" style="opacity: 1.63; display: block;"></div>
+        <div class="sweet-alert showSweetAlert visible" data-custom-class="" data-has-cancel-button="false" data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop" data-timer="null" style="display: block; margin-top: -178px;">
+
+            <fieldset>
+                <input name="WorkName" type="text" tabindex="3" placeholder="">
+            </fieldset>
+
+
+            <fieldset>
+                <input type="text" tabindex="3" placeholder="">
+                <div class="sa-input-error"></div>
+            </fieldset>
+            <div class="sa-error-container">
+                <div class="icon">!</div>
+                <p>Not valid!</p>
+            </div>
+            <div class="sa-button-container">
+                <div class="sa-confirm-button-container">
+                    <button class="confirm" tabindex="1" style="display: inline-block; background-color: rgb(140, 212, 245); box-shadow: rgba(140, 212, 245, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px inset;">Sửa</button><div class="la-ball-fall">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <button class="cancel" tabindex="1" style="display: inline-block;">Hủy</button><div class="la-ball-fall">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+@section scripts{
+    <script>
+        function refreshTable(filterInput) {
+            $.post('/WorkList/WorkListPartial', filterInput, function (response) {
+                $('#table-space').html(response);
+                //$('select.row-edit').material_select();
+                //$('select.row-edit').each(function () {
+                //    $(this).val($(this).find('option:selected').attr('value'));
+                //    $(this).material_select();
+                //})
+
+                $('.datepicker').pickadate({
+                    monthsFull: ['Tháng 1',
+                        'Tháng 2',
+                        'Tháng 3',
+                        'Tháng 4',
+                        'Tháng 5',
+                        'Tháng 6',
+                        'Tháng 7',
+                        'Tháng 8',
+                        'Tháng 9',
+                        'Tháng 10',
+                        'Tháng 11',
+                        'Tháng 12'],
+                    weekdaysShort: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                    monthsShort: ['Tháng 1',
+                        'Tháng 2',
+                        'Tháng 3',
+                        'Tháng 4',
+                        'Tháng 5',
+                        'Tháng 6',
+                        'Tháng 7',
+                        'Tháng 8',
+                        'Tháng 9',
+                        'Tháng 10',
+                        'Tháng 11',
+                        'Tháng 12'],
+                    today: 'Hôm nay',
+                    clear: 'Hủy chọn',
+                    format: 'dd/mm/yyyy',
+                    formatSubmit: 'dd/mm/yyyy'
+                })
+            });
+        }
+
+        // load lai bảng dựa vào các điều kiện của trang
+        function refreshTableByView() {
+
+            // số lượng dòng hiển thị trên trang
+            var numberItemPerPage = $('.filter-item[name="NumberItemPerPage"] select option:selected').attr('value');
+
+            // page hiện tại cần hiển thị
+            var page = 0;
+            if ($('#data-paging').length > 0) {
+                page = parseInt($('#data-paging span.active').attr('value')) - 1;
+            }
+
+            // người tạo
+            var creationUser = $('.filter-item[name="CreateByFilters"] select option:selected').attr('value');
+
+            // ngày bắt đầu thực hiện
+            var dateBegin = $('.filter-item[name="CreateTimeFilters"] input').val();
+
+            // trạng thái
+            var status = $('.filter-item[name="StatusFilter"] select option:selected').attr('value');
+
+            // dòng cần sắp xếp
+            var columnSortingName = '';
+            var sortingAction;
+            if ($('.sorting_asc').length > 0) {
+                columnSortingName = $('.sorting_asc').attr('name');
+                sortingAction = 'asc';
+            }
+            if ($('.sorting_desc').length > 0) {
+                columnSortingName = $('.sorting_desc').attr('name');
+                sortingAction = 'desc';
+            }
+
+            //tạo ra đối tượng để filter
+            var filterInput = {
+                Page: page,
+                NumberItemPerPage: numberItemPerPage,
+                FilterByUserName: creationUser,
+                FilterByDateBegin: dateBegin,
+                FilterByStatusId: status,
+                ColumnSortingName: columnSortingName,
+                SortingAction: sortingAction
+            };
+
+            refreshTable(filterInput);
+        }
+
+        // load bảng bằng paging
+        $('body').delegate('#data-paging span', 'click', function () {
+            $('#data-paging span.active').removeClass('active');
+            $(this).addClass('active');
+            refreshTableByView();
+        });
+
+        //load lại bảng khi chọn hiển thị
+        $('.filter-item[name="NumberItemPerPage"] select').on('change', function () {
+            refreshTableByView();
+        });
+
+        //load lại bảng khi filter người tạo
+        $('.filter-item[name="CreateByFilters"] select').on('change', function () {
+            refreshTableByView();
+        });
+
+        //load lại bảng khi filter trạng thái
+        $('.filter-item[name="StatusFilter"] select').on('change', function () {
+            refreshTableByView();
+        });
+
+        //load lại bảng khi filter ngày tạo
+        $('.filter-item[name="CreateTimeFilters"] input').change(function () {
+            refreshTableByView();
+        });
+
+        //load lại bảng khi sắp xếp
+        onSorting = function () {
+            refreshTableByView();
+        }
+
+        // reload bảng
+        refreshTableByView();
+
+
+        $('body').delegate('.delete-button', 'click', function () {
+            var trElem = $(this).closest('tr');
+            $.post('/WorkList/DeleteWork?workId=' + trElem.attr('data-id'), function () {
+                trElem.remove();
+            });
+        });
+
+        $('body').delegate('.edit-button', 'click', function () {
+            $(this).closest('tr').addClass('editing');
+        });
+
+        $('body').delegate('.cancel-work', 'click', function () {
+            var trElem = $(this).closest('tr');
+            trElem.removeClass('editing');
+            trElem.find('.row-edit').each(function () {
+                $(this).val($(this).closest('td').find('.row-display').attr('data-value'));
+            });
+
+            //$('select.row-edit').material_select();
+        });
+
+        function resetInput(trElem) {
+            trElem.find('.row-edit').each(function () {
+                $(this).val($(this).closest('td').find('.row-display').attr('data-value'));
+            });
+
+            //$('select.row-edit').material_select();
+
+        }
+
+        $('body').delegate('.cancel-work', 'click', function () {
+            var trElem = $(this).closest('tr');
+            trElem.removeClass('editing');
+            resetInput(trElem);
+        });
+
+        $('body').delegate('.save-work', 'click', function () {
+            var trElem = $(this).closest('tr');
+            var obj = { WorkId: trElem.attr('data-id') };
+            trElem.find('.row-edit').each(function () {
+                if ($(this).hasClass('datepicker')) {
+                    var temp = $(this).val();
+                    var day = temp.substr(0, temp.indexOf('/'));
+                    temp = temp.replace(day + '/', '');
+                    var month = temp.substr(0, temp.indexOf('/'));
+                    temp = temp.replace(month + '/', '');
+                    var year = temp;
+                    obj[$(this).attr('name')] = year + '/' + month + '/' + day;
+                }
+                else {
+                    obj[$(this).attr('name')] = $(this).val();
+                }
+            });
+
+            if (new Date(obj.WorkTimeExpired) < new Date(obj.WorkDateBegin)) {
+                error('Deadline không được nhỏ hơn ngày bắt đầu');
+            }
+
+            $.post('/WorkList/UpdateWork', obj).done(function (response) {
+                if (response.result == "success") {
+                    success("Thành công");
+                    trElem.find('.row-display').each(function () {
+                        var tdElem = $(this).closest('td');
+                        var displayElem = tdElem.find('.row-display');
+                        var editElem = tdElem.find('.row-edit');
+
+                        displayElem.attr('data-value', editElem.val());
+
+                        if (editElem.find('option').length > 0) {
+                            displayElem.html(editElem.find('option:selected').text());
+                        }
+                        else {
+
+                            displayElem.html(editElem.val());
+                        }
+                    });
+                    trElem.find('.priority').css('cssText','background:'+
+                        $('#priority-color option[data-id=' + response.data.priorityId + ']').attr('data-color') + '!important');
+
+                    trElem.removeClass('editing');
+                }
+                else {
+                    error(response.message);
+                }
+
+            }).fail(function () {
+                error('Có vấn đề về đường truyền mạng');
+            })
+            console.log(obj);
+        });
+
+    </script>
+}

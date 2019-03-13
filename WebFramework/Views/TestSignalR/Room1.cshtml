@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Collaborative Text Editor";
+}
+
+@section Scripts
+    {
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/signal_r_helper.js" asp-append-version="true"></script>
+
+    <script>
+        var editor = document.getElementById("editor");
+        var signalrHelper = new SignalRHelper("groupHub");
+        signalrHelper.onReceiveText(function (text) {
+            editor.value = text;
+            editor.focus();
+            editor.setSelectionRange(editor.value.length, editor.value.length);
+        });
+
+        function join() {
+            signalrHelper.joinGroup(group.value);
+            editor.style.display = "initial";
+        }
+
+        function change() {
+            signalrHelper.sendText(editor.value);
+        }
+    </script>
+
+}
+
+<div>
+    <br />
+    <textarea style="width:100%;height:300px;" id="editor" onkeyup="change()"></textarea>
+</div>
+
+
+<div>
+    <br />
+    <input id="group" />
+    <input type="button" value="Join Group" onclick="join()" />
+    <br /><br />
+    <textarea style="width:100%;height:300px;" id="editor" onkeyup="change()"></textarea>
+</div>
+

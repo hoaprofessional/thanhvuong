@@ -1,0 +1,312 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebFramework.Models.QoutationManagementViewModels.AllQoutationViewModels.QoutationCanCreateOrderViewModel
+<aside id="right-sidebar-nav">
+    <ul id="chat-out" class="side-nav rightside-navigation">
+        <li class="li-hover">
+            <div class="row">
+                <div class="col s12 border-bottom-1 mt-5">
+                    <ul class="tabs">
+                        <li class="tab col s4">
+                            <a href="#all" class="active">
+                                <span class="material-icons">dashboard</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#undone">
+                                <span class="material-icons">highlight_off</span>
+                            </a>
+                        </li>
+                        <li class="tab col s4">
+                            <a href="#done">
+                                <span class="material-icons">check_circle</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="all" class="col s12">
+                    <div class="flex align justify">
+                        <h6 class="mt-5 mb-3 ml-3">Toàn bộ báo giá</h6>
+                        <a href="works.html" class="flex align justify">
+                            <i class="material-icons">more_horiz</i>
+                        </a>
+                    </div>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="undone" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc chưa hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color amber lighten-2">hourglass_empty</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="done" class="col s12">
+                    <h6 class="mt-5 mb-3 ml-3">Công việc đã hoàn thành</h6>
+                    <div class="activity">
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+
+                        <div class="col s3 mt-2 center-align recent-activity-list-icon">
+                            <i class="material-icons white-text icon-bg-color green lighten-2">check_circle</i>
+                        </div>
+                        <div class="col s9 recent-activity-list-text">
+                            <a href="#" class="deep-purple-text medium-small">Mới đây</a>
+                            <p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small">Jim Doe Purchased new equipments for zonal office.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</aside>
+<!-- END RIGHT SIDEBAR NAV-->
+
+<section id="content">
+    <div class="container">
+        <div class="section">
+            <div class="col s12">
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-header gradient-45deg-light-blue-cyan">
+                        <div class="row flex align">
+                            <div class="col s10 m6 l6">
+                                <h4 class="task-card-title">TẠO ĐƠN ĐẶT HÀNG</h4>
+                                <p class="task-card-date">@DateTime.Today.ToString("dd/MM/yyyy")</p>
+                            </div>
+
+                            <div class="col s2 m6 l6">
+                                <a id="open-filter-button" data-href="filter" class="btn-flat waves-effect white-text right">
+                                    <i class="material-icons right">filter_list</i> LỌC
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="filter-area" data-page="filter">
+                        <button id="filter-button" class="collapsible">Filter</button>
+                        <div class="collapsible-content flex-column-res">
+                            <div class="filter-item number-shows">
+                                <div>
+                                    <p class="label">
+                                        Hiển thị
+                                    </p>
+                                    <select aria-controls="data-table-simple" class="get-value" name="NumberItemPerPage">
+                                        @foreach (var numberShowPage in Model.NumbersShowPage)
+                                        {
+                                            <option value="@numberShowPage">@numberShowPage dòng</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="auto-complete-content">
+                                    <p class="label">
+                                        Nhân viên báo giá
+                                    </p>
+                                    <input type="text" name="CreateByFilters" class="get-value autocomplete" id="inpCreationUser">
+                                    <select aria-controls="data-table-simple" class="select-of-auto-complete">
+                                        @foreach (var createByFilter in Model.CreateByFilters)
+                                        {
+                                            <option>@createByFilter.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-item">
+                                <div>
+                                    <p class="label">
+                                        Từ ngày
+                                    </p>
+                                    <input name="FromDate" style="cursor:pointer;" id='date' type='text' class='datepicker get-value'>
+                                </div>
+                            </div>
+
+                            <div class="filter-item">
+                                <div>
+                                    <p class="label">
+                                        Tới ngày
+                                    </p>
+                                    <input name="ToDate" style="cursor:pointer;" id='date' type='text' class='datepicker get-value'>
+                                </div>
+                            </div>
+
+                            <div class="filter-item">
+                                <div class="auto-complete-content">
+                                    <p class="label">
+                                        Sản phẩm
+                                    </p>
+                                    <input name="ProductName" type="text" id="inpProductId" class="autocomplete get-value">
+                                    <select aria-controls="data-table-simple" class="select-of-auto-complete">
+                                        <option value="">Tất cả</option>
+                                        @foreach (var product in Model.ProductFilters)
+                                        {
+                                            <option value="@product.Id">@product.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-item">
+                                <div class="auto-complete-content">
+                                    <p class="label">
+                                        Khách hàng
+                                    </p>
+                                    <input name="ClientName" type="text" id="inpCreationUser" class="autocomplete get-value">
+                                    <select aria-controls="data-table-simple" class="select-of-auto-complete">
+                                        @foreach (var client in Model.ClientFilters)
+                                        {
+                                            <option value="@client.Id">@client.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                    <li id="table-space" class="collection-header">
+                        @* table - space *@
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="modalfix" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4>Danh sách task</h4>
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-item">
+                        <input type="checkbox" id="task1" />
+                        <label for="task1">
+                            Check the new Mockup of ABC.
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat green lighten-1 gradient-shadow">Thấp</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat yellow darken-3 gradient-shadow">Trung bình</span>
+                    </li>
+                    <li class="collection-item">
+                        <input type="checkbox" id="task2" checked="checked" disabled="disabled" />
+                        <label for="task2">
+                            I did it !
+                            <a href="#" class="secondary-content">
+                                <span class="ultra-small">Thứ ngày</span>
+                            </a>
+                        </label>
+                        <span class="task-cat red lighten-1 gradient-shadow">Cao</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+@section scripts{
+    <script>
+        function refreshTable(filterInput) {
+            $.post('/AllQoutation/QoutationCanCreateOrderPartial', filterInput, function (response) {
+                $('#table-space').html(response);
+            });
+        }
+
+        // load lai bảng dựa vào các điều kiện của trang
+        function refreshTableByView() {
+            var filterInput = {};
+            $('.filter-item .get-value').each(function () {
+                var name = $(this).attr('name');
+                var value = $(this).val();
+                filterInput[name] = value;
+            });
+            // dòng cần sắp xếp
+            var columnSortingName = '';
+            var sortingAction;
+            if ($('.sorting_asc').length > 0) {
+                columnSortingName = $('.sorting_asc').attr('name');
+                sortingAction = 'asc';
+            }
+            if ($('.sorting_desc').length > 0) {
+                columnSortingName = $('.sorting_desc').attr('name');
+                sortingAction = 'desc';
+            }
+
+            console.log(filterInput);
+
+            filterInput.ColumnSortingName = columnSortingName;
+            filterInput.SortingAction = sortingAction;
+            filterInput.Page = parseInt($('#data-paging span.active').attr('value')) - 1;
+            refreshTable(filterInput);
+        }
+
+        // load bảng bằng paging
+        $('body').delegate('#data-paging span', 'click', function () {
+            $('#data-paging span.active').removeClass('active');
+            $(this).addClass('active');
+            refreshTableByView();
+        });
+
+        //load lại bảng khi thay doi gia tri
+        $('.filter-item .get-value').on('change', function () {
+            refreshTableByView();
+        });
+
+        $('.filter-item .auto-complete-content .get-value').keydown(function (event) {
+            if (event.which === 13) {
+                refreshTableByView();
+            }
+        });
+
+        //load lại bảng khi sắp xếp
+        onSorting = function () {
+            refreshTableByView();
+        }
+
+        // reload bảng
+        refreshTableByView();
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model WebFramework.Models.ReportQoutations.ReportQoutationViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .flex-column-res.report {
+        display: flex;
+        padding: 50px;
+        flex-wrap: wrap;
+    }
+
+        .flex-column-res.report > div {
+            width: 41%;
+            margin-right: 20px;
+        }
+</style>
+
+@Html.Partial("ReportFilter", Model.ReportFilter)
+
+<div id="table-space" class="collection-header">
+    <table id="tasks" class="responsive-table dataTable display highlight" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Mã khách hàng</th>
+                <th>Tên khách hàng</th>
+                <th>Tổng số sản phẩm</th>
+                <th>Số tiền mua vào</th>
+                <th>Số tiền bán ra</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,89 @@
+﻿@model WebCore.Utils.ModelHelper.PagingResultDto<Framework.Models.QoutationManagement.Qoutation>
+<div class="table-responsive">
+    <table class="table">
+        <thead class=" text-primary">
+            <tr>
+                <th>
+                    Hành động
+                </th>
+                <th>
+                    Số báo giá
+                </th>
+                <th>
+                    Tên khách hàng
+                </th>
+                <th>
+                    Địa chỉ
+                </th>
+                <th>
+                    Số điện thoại
+                </th>
+                <th>
+                    Địa điểm giao hàng
+                </th>
+                <th>
+                    Ngày dự kiến hoàn thành báo giá
+                </th>
+                <th>
+                    Tình trạng
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">settings</i>
+                                <p class="d-lg-none d-md-block">
+                                    Hành động
+                                </p>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-item">
+                                    <i class="material-icons">create</i>
+                                    <a href="/Management/QoutationDetail?qoutationId=@item.Id">
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                                <div onclick="deleteQoutation('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">delete</i>
+                                    <a href="#">
+                                        Xóa
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="/Management/QoutationDetail?qoutationId=@item.Id">
+                            @item.Id
+                        </a>
+                    </td>
+                    <td>
+                        @item.Client.Name
+                    </td>
+                    <td>
+                        @item.Client.Address
+                    </td>
+                    <td>
+                        @item.Client.PhoneNumber
+                    </td>
+                    <td>
+                        @item.DeliveryPlace
+                    </td>
+                    <td>
+                        @item.CreationTime.Value.AddDays((int)item.EstimatedInstallationTime).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.QoutationStatus.Name
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <custompager pager-model="@Model" />
+</div>

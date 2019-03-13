@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Collaborative Text Editor";
+}
+
+@section Scripts
+{
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/signal_r_helper.js" asp-append-version="true"></script>
+
+    <script>
+        var editorRoom1 = document.getElementById("room1");
+        var editorRoom2 = document.getElementById("room2");
+        var signalrRoom1 = new SignalRHelper("groupHub", "room1");
+        var signalrRoom2 = new SignalRHelper("groupHub", "room2");
+
+        //signalrRoom1.joinGroup("room1");
+        //signalrRoom2.joinGroup("room2");
+
+        signalrRoom1.onReceiveText(function (text) {
+
+            editorRoom1.value = text;
+            editorRoom1.focus();
+            editorRoom1.setSelectionRange(editor.value.length, editor.value.length);
+        });
+
+        signalrRoom2.onReceiveText(function (text) {
+
+            editorRoom2.value = text;
+            editorRoom2.focus();
+            editorRoom2.setSelectionRange(editor.value.length, editor.value.length);
+        });
+
+
+    </script>
+
+}
+
+<div>
+    <br />
+    <p>Room1 </p>
+    <br />
+    <textarea style="width:100%;height:300px;" id="room1"></textarea>
+    <br />
+    <p>Room2</p>
+    <br />
+    <textarea style="width:100%;height:300px;" id="room2"></textarea>
+</div>
+

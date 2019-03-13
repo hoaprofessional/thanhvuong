@@ -1,0 +1,405 @@
+﻿@model WebFramework.Models.Shared.LayoutViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" type="image/png" href="/images/logo.gif" />
+    <title>@Model.Title</title>
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/backend.css" asp-append-version="true" rel="stylesheet" />
+    @*<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=6iblr2nx6adq89h60pna6m1mb820s099i2f83ujqn90fn3ta"></script>*@
+    <script src="~/tinymce/js/tinymce/tinymce.min.js"></script>
+    @RenderSection("styles", false)
+</head>
+
+<body>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+
+    <header id="header" class="page-topbar">
+        <div class="navbar-fixed">
+            <nav class="navbar-color gradient-45deg-purple-deep-orange gradient-shadow">
+                <div class="nav-wrapper">
+                    <div class="header-search-wrapper hide-on-med-and-down">
+                        <i class="material-icons">search</i>
+                        <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Tìm kiếm" />
+                    </div>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen">
+                                <i class="material-icons">settings_overscan</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
+                                <i class="material-icons">
+                                    notifications_none
+                                    <small class="notification-badge notification-number">@Model.NumberOfUnreadNotification</small>
+                                </i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown">
+                                <span class="avatar-status">
+                                    @if (Model.User != null && !String.IsNullOrEmpty(Model.User.Avatar))
+                                    {
+                                        <img src="@Model.User.Avatar" alt="avatar">
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/avatar/avatar-7.png" alt="avatar">
+                                    }
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse">
+                                <i class="material-icons">format_indent_increase</i>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- notifications-dropdown -->
+                    <ul id="notifications-dropdown" class="dropdown-content">
+                        <li>
+                            <h6>
+                                THÔNG BÁO
+                                <a href="/AllNotification?staffId=@Model.StaffId" class="right">
+                                    <span class="new badge gradient-45deg-purple-deep-orange gradient-shadow notification-number" data-badge-caption="mới">
+                                        @Model.NumberOfUnreadNotification
+                                    </span>
+                                </a>
+                            </h6>
+                            <h6 class="all-notifi">
+                                <a href="#">Xem tất cả thông báo</a>
+                            </h6>
+                        </li>
+                        <li class="divider"></li>
+                        @foreach (var notificationDto in Model.TopNotifications)
+                        {
+                            <li data-id="@notificationDto.Id" class="@notificationDto.NewClass notification-content">
+                                <a href="@notificationDto.Link" class="grey-text text-darken-2">
+                                    <span class="material-icons icon-bg-circle green lighten-1 small">check_circle</span>
+                                    @notificationDto.Content
+                                </a>
+                                <time class="media-meta">@Html.Raw(notificationDto.TimeDisplay)</time>
+                            </li>
+                        }
+                        <li class="all-notification"><a href="#">Tất cả thông báo</a></li>
+                    </ul>
+                    <!-- profile-dropdown -->
+                    <ul id="profile-dropdown" class="dropdown-content">
+                        <li>
+                            <a href="/" class="grey-text text-darken-1">
+                                <i class="material-icons">face</i>
+                                Trang cá nhân
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @*<li>
+                                <a href="/" class="grey-text text-darken-1">
+                                    <i class="material-icons">lock_outline</i>
+                                    Cập nhật mật khẩu
+                                </a>
+                            </li>*@
+                        <li class="divider"></li>
+                        <li>
+                            <a id="logout" class="grey-text text-darken-1">
+                                <i class="material-icons">keyboard_tab</i>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+
+    <div id="main" class="main-full product-card">
+        <div class="wrapper">
+
+            <aside id="left-sidebar-nav" class="nav-collapsible nav-collapsed">
+                <div class="brand-sidebar">
+                    <h1 class="logo-wrapper">
+                        <a href="#" class="brand-logo darken-1 flex align">
+                            <img src="/images/logo.gif" alt="materialize logo">
+                            <span class="logo-text hide-on-med-and-down">Admin Panel</span>
+                        </a>
+                    </h1>
+                </div>
+                <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                    <li class="no-padding">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li class="bold">
+                                <a class="collapsible-header  waves-effect waves-cyan">
+                                    <i class="material-icons">chrome_reader_mode</i>
+                                    <span class="nav-text">Báo giá</span>
+                                </a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="/QuotesStatusWaitingApprovalInterested">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Báo giá đang đợi duyệt</span>
+                                            </a>
+                                        </li>
+                                        @*<li>
+                                                <a href="/QuotesProcessedInterested">
+                                                    <i class="material-icons">keyboard_arrow_right</i>
+                                                    <span>Báo giá đã xử lý</span>
+                                                </a>
+                                            </li>*@
+                                        <li>
+                                            <a href="/QuotesStatusWaitingProcessInterested">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Báo giá đã được duyệt</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/AllQoutation">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Tất cả báo giá</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            @if (Model.HasPermission(PermissionValue.ViewReport1)
+|| Model.HasPermission(PermissionValue.ViewReport2)
+|| Model.HasPermission(PermissionValue.ViewReport3)
+|| Model.HasPermission(PermissionValue.ViewReport4)
+|| Model.HasPermission(PermissionValue.ViewReport5))
+                            {
+                                <li class="bold">
+                                    <a class="collapsible-header waves-effect waves-cyan">
+                                        <i class="material-icons">pie_chart_outlined</i>
+                                        <span class="nav-text">Thống kê</span>
+                                    </a>
+                                    <div class="collapsible-body">
+                                        <ul>
+                                            @if (Model.HasPermission(PermissionValue.ViewReport1))
+                                            {
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="material-icons">keyboard_arrow_right</i>
+                                                        <span>Thống kê theo báo giá hoàn thành</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (Model.HasPermission(PermissionValue.ViewReport2))
+                                            {
+                                                <li>
+                                                    <a href="/ReportQoutation">
+                                                        <i class="material-icons">keyboard_arrow_right</i>
+                                                        <span>Thống kê theo số báo giá</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (Model.HasPermission(PermissionValue.ViewReport3))
+                                            {
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="material-icons">keyboard_arrow_right</i>
+                                                        <span>Thống kê doanh thu</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (Model.HasPermission(PermissionValue.ViewReport4))
+                                            {
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="material-icons">keyboard_arrow_right</i>
+                                                        <span>Thống kê theo số đơn hàng</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (Model.HasPermission(PermissionValue.ViewReport5))
+                                            {
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="material-icons">keyboard_arrow_right</i>
+                                                        <span>Thống kê làm việc nhân viên</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                            <li class="bold">
+                                <a class="collapsible-header  waves-effect waves-cyan">
+                                    <i class="material-icons">mail_outline</i>
+                                    <span class="nav-text">Công việc</span>
+                                </a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="/WorkList">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Tất cả công việc</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/WorkList/MyWork">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Công việc của tôi</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="bold">
+                                <a class="collapsible-header  waves-effect waves-cyan">
+                                    <i class="material-icons">chrome_reader_mode</i>
+                                    <span class="nav-text">Đơn đặt hàng</span>
+                                </a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="/OrderStatusWaitingApprovalInterested">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Đơn đặt hàng đang đợi duyệt</span>
+                                            </a>
+                                        </li>
+                                        @*<li>
+                                                <a href="billAll.html">
+                                                    <i class="material-icons">keyboard_arrow_right</i>
+                                                    <span>Đơn đặt hàng đã xử lý</span>
+                                                </a>
+                                            </li>*@
+                                        <li>
+                                            <a href="/OrderStatusWaitingProcessInterested">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Đơn đặt hàng đã được xử lý</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/AllOrder">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                                <span>Tất cả đơn đặt hàng</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-medium hide-on-large-only">
+                    <i class="material-icons">menu</i>
+                </a>
+            </aside>
+
+            <section id="content">
+                @RenderBody()
+            </section>
+        </div>
+    </div>
+
+    @if (Model.HasPermission(PermissionValue.AssignTask) || Model.HasPermission(PermissionValue.CanCreateOrder)
+|| Model.HasPermission(PermissionValue.CreateQoutation))
+    {
+        <div class="fixed-action-btn " style="bottom: 50px; right: 19px;">
+            <a class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+                <i class="material-icons">add</i>
+            </a>
+            <ul>
+                @if (Model.HasPermission(PermissionValue.AssignTask))
+                {
+                    <li>
+                        <a href="/CreateWork" class="btn-floating red lighten-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Tạo công việc mới">
+                            <i class="material-icons">next_week</i>
+                        </a>
+                    </li>
+                }
+
+
+                @if (Model.HasPermission(PermissionValue.CanCreateOrder))
+                {
+                    <li>
+                        <a href="/AllQoutation/QoutationCanCreateOrder" class="btn-floating amber lighten-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Tạo đơn đặt hàng từ báo giá">
+                            <i class="material-icons">comment</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/CreateOrder/CreateBlankOrder" class="btn-floating amber lighten-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Tạo đơn đặt hàng mới">
+                            <i class="material-icons">comment</i>
+                        </a>
+                    </li>
+                }
+
+                @if (Model.HasPermission(PermissionValue.CreateQoutation))
+                {
+                    <li>
+                        <a href="/CreateQoutation" class="btn-floating green lighten-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Tạo báo giá mới">
+                            <i class="material-icons">note_add</i>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+
+    }
+
+
+
+    <footer class="page-footer gradient-45deg-purple-deep-orange">
+        <div class="footer-copyright">
+            <div class="container">
+                <span>
+                    Copyright ©
+                    <script type="text/javascript">
+                        document.write(new Date().getFullYear());
+                    </script> <a class="grey-text text-lighten-4" href="/" target="_blank"></a> Admin Panel.
+                </span>
+                <span class="right hide-on-small-only"> Design and Developed by <a class="grey-text text-lighten-4" href="#">T&H</a></span>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="/js/script.js"></script>
+    <script src="~/js/backend.js" asp-append-version="true"></script>
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/signal_r_helper.js" asp-append-version="true"></script>
+    <script>
+        function handleText(json) {
+            var obj = JSON.parse(json);
+            if (!obj.CheckStaffId || obj.StaffId.indexOf('@Model.StaffId')!=-1) {
+                $('ul#notifications-dropdown').insertAt(2, String.format('<li class="new notification-content">\
+                                <a href="{0}" class="grey-text text-darken-2">\
+                                    <span class="material-icons icon-bg-circle green lighten-1 small">check_circle</span>\
+                                    {1}\
+                                </a>\
+                                <time class="media-meta">{2}</time>\
+                            </li>', obj.Link, obj.NotificationTitle, obj.NotificationTime));
+                if ($('ul#notifications-dropdown .notification-content').length == 11) {
+                    $($('ul#notifications-dropdown .notification-content')[10]).remove();
+                }
+                var number = parseInt($($('.notification-number')[0]).text());
+                $('.notification-number').text(number + 1);
+            }
+        }
+        var hubs = [];
+    @foreach (var permission in Model.Permissions.ToHashSet())
+    {
+        var groupName = permission + "Group";
+        @Html.Raw(@"
+                hubs['@groupName'] = new SignalRHelper('notificationHub', '@permission');
+                hubs['@groupName'].onReceiveText(function (text) {
+                    handleText(text);
+                });".Replace("@groupName", groupName).Replace("@permission", permission));
+
+    }
+    </script>
+    @*<script src="~/js/signalr_receive_text.js" asp-append-version="true"></script>*@
+    @RenderSection("scripts", false)
+</body>
+</html>

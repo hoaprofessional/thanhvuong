@@ -1,0 +1,9 @@
+﻿@using WebCore.Services.Share.Commons.Permissions.Dto
+@using WebFramework.Areas.Management.Helper
+@model PermissionDto
+<div class="checkbox checkbox-info">
+    <input data-checked="@Model.Checked" data-roles="@Model.RolesDisplay" value="@Model.Key" id="chk-@Model.Key" type="checkbox">
+    <label for="chk-@Model.Key">
+        @Html.DictionaryFor(Model.Name.Substring(Model.Name.IndexOf(".") + 1))
+    </label>
+</div>

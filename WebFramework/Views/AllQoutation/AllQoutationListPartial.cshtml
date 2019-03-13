@@ -1,0 +1,134 @@
+﻿@model WebFramework.Models.QoutationManagementViewModels.AllQoutationViewModels.AllQoutationListPartialViewModel
+@using Framework.DTOs.QoutationManagementDto.BaseQoutationDto;
+<table id="tasks" class="responsive-table dataTable display highlight" cellspacing="0">
+    <thead>
+        <tr>
+            <th class="center" name="@nameof(QoutationDto.QoutationId)">Id</th>
+
+            @if (nameof(QoutationDto.ClientName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.ClientName)" class="sorting_@Model.SortingAction">Tên KH</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.ClientName)" class="sorting">Tên KH</th>
+            }
+
+
+            @if (nameof(QoutationDto.StaffName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.StaffName)" class="sorting_@Model.SortingAction">NV Báo giá</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.StaffName)" class="sorting">NV Báo giá</th>
+            }
+
+            @if (nameof(QoutationDto.QoutationCreationTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.QoutationCreationTime)" class="sorting_@Model.SortingAction">Ngày tạo</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.QoutationCreationTime)" class="sorting">Ngày tạo</th>
+            }
+
+            @if (nameof(QoutationDto.DateEstimatedHandOver) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.DateEstimatedHandOver)" class="sorting_@Model.SortingAction">Ngày bàn giao</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.DateEstimatedHandOver)" class="sorting">Ngày bàn giao</th>
+            }
+
+
+            @if (nameof(QoutationDto.QoutationTotalPriceBuy) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.QoutationTotalPriceBuy)" class="sorting_@Model.SortingAction">Tổng nhập</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.QoutationTotalPriceBuy)" class="sorting">Tổng nhập</th>
+            }
+            @if (nameof(QoutationDto.QoutationTotalPriceBuy) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.QoutationTotalPriceBuy)" class="sorting_@Model.SortingAction">Tổng bán</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.QoutationTotalPriceBuy)" class="sorting">Tổng bán</th>
+            }
+            @if (nameof(QoutationDto.QoutationStatusName) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.QoutationStatusName)" class="sorting_@Model.SortingAction">Trạng thái báo giá</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.QoutationStatusName)" class="sorting">Trạng thái báo giá</th>
+            }
+            @if (nameof(QoutationDto.QoutationModifiedTime) == Model.ColumnSortingName)
+            {
+                <th name="@nameof(QoutationDto.QoutationModifiedTime)" class="sorting_@Model.SortingAction">Cập nhật lần cuối</th>
+            }
+            else
+            {
+                <th name="@nameof(QoutationDto.QoutationModifiedTime)" class="sorting">Cập nhật lần cuối</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Qoutation in Model.Qoutations)
+        {
+            <tr class="collection-item">
+                <td class="center">
+                    <a class="modal-trigger" href="/QoutationDetail/Index/@Qoutation.QoutationId">@Qoutation.QoutationId</a>
+                </td>
+                <td>@Qoutation.ClientName</td>
+                <td>@Qoutation.StaffName</td>
+                <td>@Qoutation.QoutationCreationTime.Value.ToString("dd/MM/yyyy")</td>
+                <td>@Qoutation.DateEstimatedHandOver.ToString("dd/MM/yyyy")</td>
+                <td>@Qoutation.QoutationTotalPriceBuy.ToString("0,000") đ</td>
+                <td>@Qoutation.QoutationTotalPriceSell.ToString("0,000") đ</td>
+                <td>@Qoutation.QoutationStatusName</td>
+                <td>@Qoutation.QoutationModifiedTime.Value.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagings" id="data-paging">
+    <div class="inner">
+        @{
+            int previousPage = Model.CurrentPage;
+            int nextPage = Model.CurrentPage + 2;
+        }
+        @if (previousPage - 1 >= 0)
+        {
+            <span class="action prev" value="@previousPage">Trước đó</span>
+        }
+
+        @for (int p = 1; p <= Model.NumberOfPages; p++)
+        {
+            if (p == Model.CurrentPage + 1)
+            {
+                <span class="number active" value="@p">
+                    @p
+                </span>
+            }
+            else
+            {
+                <span class="number" value="@p">
+                    @p
+                </span>
+            }
+        }
+        @if (nextPage - 1 < Model.NumberOfPages)
+        {
+            <span class="action next" value="@nextPage">
+                Tiếp theo
+            </span>
+        }
+
+    </div>
+</div>

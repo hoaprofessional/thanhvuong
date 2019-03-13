@@ -1,0 +1,61 @@
+﻿@model WebFramework.Models.AllNotificationViewModels.AllNotificationPartialViewModel
+<li class="notification-in-new-page collection-header gradient-45deg-light-blue-cyan">
+    <div class="row flex align">
+        <div class="col s10 m6 l6">
+            <h4 class="task-card-title">Tất cả thông báo</h4>
+        </div>
+    </div>
+</li>
+@foreach (var item in Model.Notifications)
+{
+    string newClass = !item.IsRead ? "email-unread" : "";
+
+    <li class="collection-item avatar @newClass" data-id="@item.Id">
+        <span class="material-icons circle green lighten-1">
+            check_circle
+        </span>
+        <span class="email-title">@item.Content</span>
+        <a href="@item.Link" class="secondary-content email-time">
+            <span class="blue-text ultra-small">@item.CreationTime.Value.ToString("dd/MM/yyyy lúc hh:mm")</span>
+        </a>
+    </li>
+}
+
+
+<div class="pagings" id="data-paging">
+    <div class="inner">
+        @{
+            int previousPage = Model.CurrentPage;
+            int nextPage = Model.CurrentPage + 2;
+        }
+        @if (previousPage - 1 >= 0)
+        {
+            <span class="action prev" value="@previousPage">Trước đó</span>
+        }
+
+        @for (int p = 1; p <= Model.NumberOfPages; p++)
+        {
+            if (p == Model.CurrentPage + 1)
+            {
+                <span class="number active" value="@p">
+                    @p
+                </span>
+            }
+            else
+            {
+                <span class="number" value="@p">
+                    @p
+                </span>
+            }
+        }
+        @if (nextPage - 1 < Model.NumberOfPages)
+        {
+            <span class="action next" value="@nextPage">
+                Tiếp theo
+            </span>
+        }
+
+    </div>
+</div>
+
+<li><br /></li>

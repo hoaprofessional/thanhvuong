@@ -1,0 +1,98 @@
+﻿@model WebCore.Utils.ModelHelper.PagingResultDto<WebCore.Services.Share.Admins.Users.Dto.UserDto>
+<div class="table-responsive">
+    <table class="table">
+        <thead class=" text-primary">
+            <tr>
+                <th>
+                    Hành động
+                </th>
+                <th>
+                    Tên đăng nhập
+                </th>
+                <th>
+                    Tên người dùng
+                </th>
+                <th>
+                    Nghề nghiệp
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+
+                    @if (item.RecordStatus != ConstantConfig.UserRecordStatus.InActive)
+                    {
+                        <td class="nav-item dropdown">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">settings</i>
+                                    <p class="d-lg-none d-md-block">
+                                        Hành động
+                                    </p>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div onclick="openUpdateModal('@item.Id')" class="dropdown-item">
+                                        <i class="material-icons">create</i>
+                                        <p>
+                                            Cập nhật thông tin
+                                        </p>
+                                    </div>
+                                    <div onclick="openResetPasswordModal('@item.Id')" class="dropdown-item">
+                                        <i class="material-icons">refresh</i>
+                                        <p>
+                                            Thay đổi mật khẩu
+                                        </p>
+                                    </div>
+
+                                    @if (Html.HasPermission(PermissionValue.UserManagement_AssignPermission))
+                                    {
+                                        <div onclick="openAssignPermissionModal('@item.Id')" class="dropdown-item">
+                                            <i class="material-icons">create</i>
+                                            <p>
+                                                Phân quyền
+                                            </p>
+                                        </div>
+                                    }
+                                    @if (Html.HasPermission(PermissionValue.UserManagement_BlockUser))
+                                    {
+                                        <div onclick="lockUser('@item.Id')" class="dropdown-item">
+                                            <i class="material-icons">lock</i>
+                                            <p>
+                                                Khóa
+                                            </p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @if (Html.HasPermission(PermissionValue.UserManagement_BlockUser))
+                            {
+                                <button onclick="unlockUser('@item.Id')" type="button" class="btn btn-danger">
+                                    <i class="material-icons">lock_open</i>
+                                    Kích hoạt
+                                </button>
+                            }
+                        </td>
+                    }
+                    <td>
+                        @item.UserName
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Carrer
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <custompager pager-model="@Model" />
+</div>

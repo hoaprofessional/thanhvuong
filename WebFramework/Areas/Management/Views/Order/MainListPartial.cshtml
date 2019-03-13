@@ -1,0 +1,101 @@
+﻿@model WebCore.Utils.ModelHelper.PagingResultDto<Framework.Models.QoutationManagement.Order>
+<div class="table-responsive">
+    <table class="table">
+        <thead class=" text-primary">
+            <tr>
+                <th>
+                    Hành động
+                </th>
+                <th>
+                    Mã đơn hàng
+                </th>
+                <th>
+                    Tên khách hàng
+                </th>
+                <th>
+                    NV tạo đơn
+                </th>
+                <th>
+                    Ngày tạo
+                </th>
+                <th>
+                    Ngày hàng về
+                </th>
+                <th>
+                    Ngày giao
+                </th>
+                <th>
+                    Tổng cộng
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th>
+                    Ghi chú
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">settings</i>
+                                <p class="d-lg-none d-md-block">
+                                    Hành động
+                                </p>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-item">
+                                    <i class="material-icons">create</i>
+                                    <a href="/Management/OrderDetail?orderId=@item.Id">
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                                <div onclick="deleteOrder('@item.Id')" class="dropdown-item">
+                                    <i class="material-icons">delete</i>
+                                    <a href="#">
+                                        Xóa
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="/Management/OrderDetail?orderId=@item.Id">
+                            @item.Id
+                        </a>
+                    </td>
+                    <td>
+                        @item.Client.Name
+                    </td>
+                    <td>
+                        @item.CreationStaff?.Name
+                    </td>
+                    <td>
+                        @item.CreationTime.Value.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.ExpectedReturnGoodDate?.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.ExpectedDeliveryDate?.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.TotalPrice.ToString("0,000")
+                    </td>
+                    <td>
+                        @item.OrderStatus.Name
+                    </td>
+                    <td>
+                        @item.Note
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <custompager pager-model="@Model" />
+</div>

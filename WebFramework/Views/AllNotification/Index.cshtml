@@ -1,0 +1,26 @@
+﻿@model WebFramework.Models.AllNotificationViewModels.AllNotificationIndexViewModel;
+
+
+<div class="container">
+    <div class="section">
+        <div class="col s12" id="email-list">
+            <ul id="task-card" class="collection with-header"></ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.get('/AllNotification/NotificationPartial?staffId=@Model.StaffId&currentPage=0').done(function (response) {
+        $('#task-card').html(response);
+    });
+    // load bảng bằng paging
+    $('body').delegate('#data-paging span', 'click', function () {
+        if ($(this).hasClass('active')) {
+            return;
+        }
+        var val = $(this).attr('value');
+        $.get('/AllNotification/NotificationPartial?staffId=@Model.StaffId&currentPage=' + (val-1)).done(function (response) {
+            $('#task-card').html(response);
+        });
+    });
+</script>

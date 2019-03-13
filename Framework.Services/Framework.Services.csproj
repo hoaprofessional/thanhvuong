@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="PagedList.Core.Mvc" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.DTOs\Framework.DTOs.csproj" />
+    <ProjectReference Include="..\Framework.InputModels\Framework.InputModels.csproj" />
+    <ProjectReference Include="..\Framework.Repositories\Framework.Repositories.csproj" />
+    <ProjectReference Include="..\Framework.Utils\Framework.Utils.csproj" />
+  </ItemGroup>
+
+</Project>
