@@ -609,6 +609,8 @@ namespace Framework.Context.Migrations
 
                     b.Property<string>("CreationUserName");
 
+                    b.Property<string>("Discount");
+
                     b.Property<bool?>("IsTest");
 
                     b.Property<DateTime?>("ModifiedTime");

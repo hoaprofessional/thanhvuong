@@ -17,6 +17,7 @@ namespace Framework.InputModels.QoutationManagement.CreateQoutation
         public String ProductImage { get; set; }
         public String ProductImageCode { get; set; }
         public String ProductSize { get; set; }
+        public String Discount { get; set; }
         [MinValue(0)]
         public int ProductQuantity { get; set; }
 

@@ -66,12 +66,12 @@ namespace Framework.Services.QoutationManagementService.QoutationListService
     {
         static int NUMBER_OF_ROWS_PER_PAGE = 10;
         static int NUMBER_OF_ITEM_ROWS_MAX = 50;
-        readonly IQoutationRepository QoutationRepository;
-        readonly IClientRepository clientRepository;
-        readonly IStaffRepository staffRepository;
-        readonly IQoutationStatusRepository QoutationStatusRepository;
-        readonly IQoutationDetailRepository QoutationDetailRepository;
-        readonly IProductRepository productRepository;
+        protected readonly IQoutationRepository qoutationRepository;
+        protected readonly IClientRepository clientRepository;
+        protected readonly IStaffRepository staffRepository;
+        protected readonly IQoutationStatusRepository qoutationStatusRepository;
+        protected readonly IQoutationDetailRepository qoutationDetailRepository;
+        protected readonly IProductRepository productRepository;
 
         public BaseQoutationService(IQoutationRepository QoutationRepository,
             IClientRepository clientRepository,
@@ -80,11 +80,11 @@ namespace Framework.Services.QoutationManagementService.QoutationListService
             IQoutationDetailRepository QoutationDetailRepository,
             IProductRepository productRepository)
         {
-            this.QoutationRepository = QoutationRepository;
+            this.qoutationRepository = QoutationRepository;
             this.clientRepository = clientRepository;
             this.staffRepository = staffRepository;
-            this.QoutationStatusRepository = QoutationStatusRepository;
-            this.QoutationDetailRepository = QoutationDetailRepository;
+            this.qoutationStatusRepository = QoutationStatusRepository;
+            this.qoutationDetailRepository = QoutationDetailRepository;
             this.productRepository = productRepository;
         }
 
@@ -98,10 +98,10 @@ namespace Framework.Services.QoutationManagementService.QoutationListService
             string currentStaffId,
             string[] permissions)
         {
-            var qoutations = QoutationRepository.GetMulti(x => x.Active == true);
+            var qoutations = qoutationRepository.GetMulti(x => x.Active == true);
             var clients = clientRepository.GetMulti(x => x.Active == true);
             var staffs = staffRepository.GetMulti(x => x.Active == true);
-            var QoutationStatuss = QoutationStatusRepository.GetMulti(x => x.Active == true);
+            var QoutationStatuss = qoutationStatusRepository.GetMulti(x => x.Active == true);
             var query = qoutations
             .LeftJoin(clients,
                         (Qoutation => Qoutation.ClientId),
@@ -137,7 +137,7 @@ namespace Framework.Services.QoutationManagementService.QoutationListService
                 var productIds = productRepository.GetMulti(x => x.Active == true
                 && x.Name.ToLower().Contains(productName.ToLower())).Select(x => x.Id).ToList().ToArray();
                 var finderId = "," + String.Join(",", productIds) + ",";
-                var QoutationDetails = QoutationDetailRepository.GetMulti(x => x.Active == true && finderId.Contains("," + x.ProductId + ","));
+                var QoutationDetails = qoutationDetailRepository.GetMulti(x => x.Active == true && finderId.Contains("," + x.ProductId + ","));
                 query = query.Join(QoutationDetails,
                         (Qoutation => Qoutation.QoutationId),
                         (QoutationDetail => QoutationDetail.QoutationId),
@@ -252,7 +252,7 @@ namespace Framework.Services.QoutationManagementService.QoutationListService
 
         public List<QoutationStatusFilterDto> GetQoutationStatusFilterDtos()
         {
-            return QoutationStatusRepository
+            return qoutationStatusRepository
                 .GetMultiBySelectClassType<QoutationStatusFilterDto>(x => x.Active == true).ToList();
         }
 

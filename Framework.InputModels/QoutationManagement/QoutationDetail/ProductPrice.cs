@@ -9,5 +9,6 @@ namespace Framework.InputModels.QoutationManagement.QoutationDetail
         public string ProductId { get; set; }
         public decimal UnitPrice { get; set; }
         public double VAT { get; set; }
+        public string Discount{ get; set; }
     }
 }

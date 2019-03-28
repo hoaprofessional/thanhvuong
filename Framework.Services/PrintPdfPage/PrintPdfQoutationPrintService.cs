@@ -76,8 +76,10 @@ namespace Framework.Services.PrintPdfPage
                         ProductName = QoutationDetail.Product.Name,
                         ProductQuantity = QoutationDetail.ProductQuantity,
                         Size = QoutationDetail.Product.Size,
-                        TotalPrice = (decimal)QoutationDetail.TotalPriceBuy,
+                        TotalPrice = (decimal)QoutationDetail.TotalPriceSell,
                         Unit = QoutationDetail.Product.Unit,
+                        Discount = QoutationDetail.Discount,
+                        ManageId = QoutationDetail.Product.Unit,
                         UnitPrice = (QoutationDetail.UnitPriceSell+ (decimal)((double)QoutationDetail.UnitPriceSell*QoutationDetail.VATBuy))
                     });
                 }
@@ -91,7 +93,8 @@ namespace Framework.Services.PrintPdfPage
                         ProductName = QoutationDetail.ProductName,
                         ProductQuantity = QoutationDetail.ProductQuantity,
                         Size = "",
-                        TotalPrice = (decimal)QoutationDetail.TotalPriceBuy,
+                        TotalPrice = (decimal)QoutationDetail.TotalPriceSell,
+                        Discount = QoutationDetail.Discount,
                         Unit = "",
                         UnitPrice = (QoutationDetail.UnitPriceSell + (decimal)((double)QoutationDetail.UnitPriceSell * QoutationDetail.VATBuy))
                     });

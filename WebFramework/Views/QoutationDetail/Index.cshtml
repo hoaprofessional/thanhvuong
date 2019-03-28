@@ -198,77 +198,90 @@
                                 <th width="5%">Số lượng</th>
                                 <th width="5%">Tổng nhập</th>
                                 <th width="5%">Tổng bán</th>
+                                <th width="5%">Chiết khấu</th>
                                 <th width="10%" class="center">Hình ảnh</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var QoutationDetail in Model.Qoutation.QoutationDetails)
                             {
-                                <tr data-product-id="@QoutationDetail.ProductId">
-                                    <td class="not-edit">@no</td>
-                                    <td class="not-edit">@QoutationDetail.Product.Id</td>
-                                    <td class="not-edit">@QoutationDetail.Product.Name</td>
-                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductDetail)</td>
-                                    <td class="not-edit">@QoutationDetail.ProductUnit</td>
-                                    <td class="not-edit">@QoutationDetail.ProductSize</td>
-                                    <td class="not-edit">@Html.Raw(QoutationDetail.ProductNote)</td>
-                                    @if (Model.CanAujustPriceBuy)
-                                    {
-                                        <td class="not-edit" data-name="UnitPrice">
-                                            <input type="number" data-name="UnitPrice" min="0" value="0" />
-                                        </td>
-                                        <td data-name="VAT" class="not-edit">
-                                            <select data-name="VAT">
-                                                <option value="0">0%</option>
-                                                <option value="0.05">5%</option>
-                                                <option value="0.1">10%</option>
-                                            </select>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td class="not-edit">@QoutationDetail.UnitPriceBuy.ToString("0,000") đ</td>
-                                        <td class="not-edit">@Html.Raw(QoutationDetail.VATBuy * 100)%</td>
-                                    }
-                                    @if (Model.CanAujustPriceSell)
-                                    {
-                                        <td class="not-edit" data-name="UnitPrice">
-                                            <input type="number" data-name="UnitPrice" min="0" value="0" />
-                                        </td>
-                                        <td data-name="VAT" class="not-edit">
-                                            <select data-name="VAT">
-                                                <option value="0">0%</option>
-                                                <option value="0.05">5%</option>
-                                                <option value="0.1">10%</option>
-                                            </select>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td class="not-edit">@QoutationDetail.UnitPriceSell.ToString("0,000") đ</td>
-                                        <td class="not-edit">@Html.Raw(QoutationDetail.VATSell * 100)%</td>
-                                    }
+                            <tr data-product-id="@QoutationDetail.ProductId">
+                                <td class="not-edit">@no</td>
+                                <td class="not-edit">@QoutationDetail.Product.Id</td>
+                                <td class="not-edit">@QoutationDetail.Product.Name</td>
+                                <td class="not-edit">@Html.Raw(QoutationDetail.ProductDetail)</td>
+                                <td class="not-edit">@QoutationDetail.ProductUnit</td>
+                                <td class="not-edit">@QoutationDetail.ProductSize</td>
+                                <td class="not-edit">@Html.Raw(QoutationDetail.ProductNote)</td>
+                                @if (Model.CanAujustPriceBuy)
+                                {
+                                    <td class="not-edit" data-name="UnitPrice">
+                                        <input type="number" data-name="UnitPrice" min="0" value="0" />
+                                    </td>
+                                    <td data-name="VAT" class="not-edit">
+                                        <select data-name="VAT">
+                                            <option value="0">0%</option>
+                                            <option value="0.05">5%</option>
+                                            <option value="0.1">10%</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="not-edit">@QoutationDetail.UnitPriceBuy.ToString("0,000") đ</td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.VATBuy * 100)%</td>
+                                }
+                                @if (Model.CanAujustPriceSell)
+                                {
+                                    <td class="not-edit" data-name="UnitPrice">
+                                        <input type="number" data-name="UnitPrice" min="0" value="0" />
+                                    </td>
+                                    <td data-name="VAT" class="not-edit">
+                                        <select data-name="VAT">
+                                            <option value="0">0%</option>
+                                            <option value="0.05">5%</option>
+                                            <option value="0.1">10%</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="not-edit">@QoutationDetail.UnitPriceSell.ToString("0,000") đ</td>
+                                    <td class="not-edit">@Html.Raw(QoutationDetail.VATSell * 100)%</td>
+                                }
 
-                                    <td data-name="ProductQuantity" class="not-edit">@QoutationDetail.ProductQuantity</td>
-                                    @if (Model.CanAujustPriceBuy)
-                                    {
-                                        <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
-                                    }
-                                    else
-                                    {
-                                        <td class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
-                                    }
+                                <td data-name="ProductQuantity" class="not-edit">@QoutationDetail.ProductQuantity</td>
+                                @if (Model.CanAujustPriceBuy)
+                                {
+                                    <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
+                                }
+                                else
+                                {
+                                    <td class="not-edit">@QoutationDetail.TotalPriceBuy.ToString("0,000") đ</td>
+                                }
 
-                                    @if (Model.CanAujustPriceSell)
-                                    {
-                                        <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
-                                    }
-                                    else
-                                    {
-                                        <td class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
-                                    }
-                                    <td class="not-edit"><img src="@QoutationDetail.Product.Images" /></td>
-                                </tr>
+                                @if (Model.CanAujustPriceSell)
+                                {
+                                    <td data-name="TotalPrice" class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
+                                }
+                                else
+                                {
+                                    <td class="not-edit">@QoutationDetail.TotalPriceSell.ToString("0,000") đ</td>
+                                }
+
+                                @if (Model.CanAujustPriceBuy || Model.CanAujustPriceSell)
+                                {
+                                    <td class="not-edit" data-name="Discount">
+                                        <input type="text" data-name="Discount" value="@QoutationDetail.Discount" />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="not-edit">@QoutationDetail.Discount</td>
+                                }
+
+                                <td class="not-edit"><img src="@QoutationDetail.Product.Images" /></td>
+                            </tr>
                                 no++;
                             }
                             <tr>
@@ -404,6 +417,7 @@
                     product.ProductId = $(this).attr('data-product-id');
 
                     product['UnitPrice'] = parseInt($(this).find('td[data-name=UnitPrice] input').val());
+                    product['Discount'] = $(this).find('td[data-name=Discount] input').val();
                     product['VAT'] = parseFloat($(this).find('td[data-name=VAT] select').val());
 
                     if (product['UnitPrice'] == 0) {
@@ -488,6 +502,8 @@
 
                     product['UnitPrice'] = parseInt($(this).find('td[data-name=UnitPrice] input').val());
                     product['VAT'] = parseFloat($(this).find('td[data-name=VAT] select').val());
+                    product['Discount'] = $(this).find('td[data-name=Discount] input').val();
+
 
                     if (product['UnitPrice'] == 0) {
                         if (canSubmit) {

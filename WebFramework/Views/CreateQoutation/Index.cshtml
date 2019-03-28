@@ -115,11 +115,12 @@
                                 </th>
                                 <th width="10%">Mã sản phẩm</th>
                                 <th width="10%">Sản phẩm</th>
-                                <th width="20%">Mô tả</th>
+                                <th width="15%">Mô tả</th>
                                 <th width="5%">DVT</th>
                                 <th width="10%">Kích thước</th>
                                 <th width="5%">Số lượng</th>
-                                <th width="20%">Hỉnh ảnh sản phẩm</th>
+                                <th width="15%">Hỉnh ảnh sản phẩm</th>
+                                <th width="10%">Chiết khấu</th>
                                 <th width="15%">Ghi chú</th>
                             </tr>
                         </thead>
@@ -159,6 +160,7 @@
             var cell7 = row.insertCell(6);
             var cell8 = row.insertCell(7);
             var cell9 = row.insertCell(8);
+            var cell10 = row.insertCell(9);
 
             var uniqueId = uniqId();
 
@@ -200,9 +202,13 @@
             cell8.className = "not-edit";
             $(cell8).attr('data-name', 'ProductImage');
 
-            cell9.innerHTML = "<div class='input-field'><div class='tinymce tiny-" + uniqueId + " get-value'></div></div>";
+            cell9.innerHTML = "<div class='input-field'><input type='text' name='product' class='get-value'></div>";
             cell9.className = "not-edit";
-            $(cell9).attr('data-name', 'ProductNote');
+            $(cell9).attr('data-name', 'Discount');
+
+            cell10.innerHTML = "<div class='input-field'><div class='tinymce tiny-" + uniqueId + " get-value'></div></div>";
+            cell10.className = "not-edit";
+            $(cell10).attr('data-name', 'ProductNote');
 
             var config = {
                 selector: ".tiny-" + uniqueId,
@@ -306,6 +312,7 @@
                             ));
                             trElem.find('td[data-name=ProductImage] .dropify-wrapper').addClass('has-preview');
                             trElem.find('td[data-name=ProductImage] .dropify-preview').css('display','block');
+                            trElem.find('td[data-name=Discount] .get-value').val(response.data.discount);
                         }
                     });
                 },
@@ -412,6 +419,8 @@
                 product.ProductSize = trElem.find('td[data-name=Size] input').val()
                 product.ProductImageCode = getBase64Image(trElem.find('.image-preview')[0]);
                 product.ProductImage = trElem.find('.get-image-value').val();
+                debugger
+                product.Discount = trElem.find('td[data-name=Discount] input').val();
                 if (product.ProductName == null || product.ProductName == '') {
                     error('Phải nhập tên sản phẩm');
                     $(this).find('td[data-name=ProductName] input').addClass('error');

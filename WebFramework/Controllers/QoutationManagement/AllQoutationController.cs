@@ -27,6 +27,16 @@ namespace WebFramework.Controllers.QoutationManagement
             this.iIQoutationCanCreateOrderService = iIQoutationCanCreateOrderService;
         }
 
+        public IActionResult GetAllDiscount()
+        {
+            return Ok(this.allQoutationService.GetAllDiscount());
+        }
+
+        public IActionResult GetAllPrice()
+        {
+            return Ok(this.allQoutationService.GetAllPrice());
+        }
+
         public IActionResult Index()
         {
             int numberOfActiveRows = allQoutationService.GetNumberOfActiveRow(null, null, null, null, null, null, null, null);

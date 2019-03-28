@@ -69,41 +69,45 @@
                     <li style="flex:1;">SL</li>
                     <li style="flex:3;">Đơn giá (có VAT)</li>
                     <li style="flex:3;">Thành tiền (có VAT)</li>
+                    <li style="flex:2;">Chiết khấu</li>
                     <li style="flex:3;">Hình ảnh</li>
                 </ul>
                 <div class="rows">
                     @foreach (var QoutationDetail in Model.QoutationDto.QoutationDetails)
                     {
                         no++;
-                        <ul class="table-row layout-horizontal">
-                            <li style="flex:1;" data-property="STT" class="middle-align">
-                                @no
-                            </li>
-                            <li style="flex:2;" data-property="ProductName">
-                                @QoutationDetail.ProductName
-                            </li>
-                            <li style="flex:7;" data-property="Decription">
-                                @Html.Raw(QoutationDetail.Decription)
-                            </li>
-                            <li style="flex:2;" data-property="Size" class="middle-align">
-                                @QoutationDetail.SizeDisplay
-                            </li>
-                            <li style="flex:1;" data-property="Unit" class="middle-align">
-                                @QoutationDetail.Unit
-                            </li>
-                            <li style="flex:1;" data-property="ProductQuantity" class="middle-align">
-                                @QoutationDetail.ProductQuantity
-                            </li>
-                            <li style="flex:3;" data-property="UnitPrice">
-                                @QoutationDetail.UnitPrice.ToString("0,000") đ
-                            </li>
-                            <li style="flex:3;" data-property="TotalPrice">
-                                @QoutationDetail.TotalPrice.ToString("0,000") đ
-                            </li>
-                            <li style="flex:3;" class="image-row" data-property="ProductImage">
-                                <img src="@QoutationDetail.ProductImage" alt="@QoutationDetail.ProductName" />
-                            </li>
-                        </ul>
+                    <ul class="table-row layout-horizontal">
+                        <li style="flex:1;" data-property="STT" class="middle-align">
+                            @no
+                        </li>
+                        <li style="flex:2;" data-property="ProductName">
+                            @QoutationDetail.ProductName
+                        </li>
+                        <li style="flex:7;" data-property="Decription">
+                            @Html.Raw(QoutationDetail.Decription)
+                        </li>
+                        <li style="flex:2;" data-property="Size" class="middle-align">
+                            @QoutationDetail.SizeDisplay
+                        </li>
+                        <li style="flex:1;" data-property="Unit" class="middle-align">
+                            @QoutationDetail.Unit
+                        </li>
+                        <li style="flex:1;" data-property="ProductQuantity" class="middle-align">
+                            @QoutationDetail.ProductQuantity
+                        </li>
+                        <li style="flex:3;" data-property="UnitPrice">
+                            @QoutationDetail.UnitPrice.ToString("0,000") đ
+                        </li>
+                        <li style="flex:3;" data-property="TotalPrice">
+                            @QoutationDetail.TotalPrice.ToString("0,000") đ
+                        </li>
+                        <li style="flex:2;" data-property="TotalPrice">
+                            @QoutationDetail.Discount
+                        </li>
+                        <li style="flex:3;" class="image-row" data-property="ProductImage">
+                            <img src="@QoutationDetail.ProductImage" alt="@QoutationDetail.ProductName" />
+                        </li>
+                    </ul>
                     }
                 </div>
             </div>
@@ -118,8 +122,8 @@
                     <li style="flex:1;"></li>
                     <li style="flex:1;"></li>
                     <li style="flex:3;"></li>
-                    <li style="flex:3; position:relative;" class="has-text">
-                        <div style="position:absolute; left:5px;top:5px;white-space:nowrap"><b>@Model.QoutationDto.TotalPrice.ToString("0,000") đ</b></div>
+                    <li style="flex:5; position:relative;padding-left: 15px;" class="has-text">
+                        <div style="position:absolute; left:5px;top:5px;white-space:nowrap;"><b>@Model.QoutationDto.TotalPrice.ToString("0,000") đ</b></div>
                     </li>
                     <li style="flex:3;"></li>
                 </ul>

@@ -1,32 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Framework.InputModels.QoutationManagement.QoutationDetail;
+﻿using Framework.InputModels.QoutationManagement.QoutationDetail;
 using Framework.Models.QoutationManagement;
 using Framework.Repositories.Infrastructor;
 using Framework.Services.ManageService.QoutationManagement;
 using Framework.Services.QoutationManagementService.QoutationDetailService;
 using Framework.Services.Shared;
-using Framework.Services.Utils;
 using Framework.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Framework.Utils;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WebFramework.Controllers.Shared;
 using WebFramework.Infrastructor;
 using WebFramework.Models.QoutationManagementViewModels.QoutationDetailViewModel;
 using WebFramework.SignalR.Hubs;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 
 namespace WebFramework.Controllers.QoutationManagement
 {
     [Authorize]
     public class QoutationDetailController : LayoutController
     {
-        readonly IQoutationDetailService qoutationDetailService;
-        readonly IQoutationManageService qoutationManageService;
-        readonly IQoutationEventManageService qoutationEventManageService;
-        readonly IQoutationDetailManageService qoutationDetailManageService;
+        private readonly IQoutationDetailService qoutationDetailService;
+        private readonly IQoutationManageService qoutationManageService;
+        private readonly IQoutationEventManageService qoutationEventManageService;
+        private readonly IQoutationDetailManageService qoutationDetailManageService;
         protected readonly IUnitOfWork unitOfWork;
 
         public QoutationDetailController(ILayoutService layoutService,
@@ -46,7 +47,7 @@ namespace WebFramework.Controllers.QoutationManagement
 
         public IActionResult Index(int id)
         {
-            var qoutation = qoutationDetailService.GetQoutationById(id);
+            Qoutation qoutation = qoutationDetailService.GetQoutationById(id);
             if (qoutation == null)
             {
                 return Redirect("/NotFound");
@@ -102,7 +103,7 @@ namespace WebFramework.Controllers.QoutationManagement
         [HttpGet]
         public JsonResult GetProduct(string productId)
         {
-            var product = qoutationDetailService.GetProductById(productId);
+            Framework.DTOs.QoutationManagementDto.QoutationDetailDto.QoutationDetailGetProductDto.ProductResultDto product = qoutationDetailService.GetProductById(productId);
             if (product == null)
             {
                 return Json(new { result = "fail" });
@@ -138,7 +139,7 @@ namespace WebFramework.Controllers.QoutationManagement
                 List<QoutationDetail> qoutationDetails = qoutationDetailService.GetQoutationDetailsByQoutationId(qoutation.Id);
 
                 // kiểm tra có đủ sản phẩm up lên hay không
-                foreach (var product in accountantFillPriceInput.Products)
+                foreach (ProductPrice product in accountantFillPriceInput.Products)
                 {
                     if (qoutationDetails.Find(x => x.ProductId == product.ProductId) == null || product.UnitPrice <= 0
                         || (product.VAT != 0 && product.VAT != 0.05 && product.VAT != 0.1))
@@ -152,30 +153,31 @@ namespace WebFramework.Controllers.QoutationManagement
                     return Json(new { result = "fail", content = "Sản phẩm không hợp lệ" });
                 }
                 // cập nhập Qoutation
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 qoutation.QoutationStatusId = QoutationStatusIdHelper.AccountantFilledPriceBuy;
                 // cập nhật giá sản phẩm
                 decimal sumPrice = 0;
-                foreach (var qoutationDetail in qoutationDetails)
+                foreach (QoutationDetail qoutationDetail in qoutationDetails)
                 {
-                    var qoutationDetailView = accountantFillPriceInput
+                    ProductPrice qoutationDetailView = accountantFillPriceInput
                                                 .Products
                                                 .Where(x => x.ProductId == qoutationDetail.ProductId)
                                                 .SingleOrDefault();
 
                     qoutationDetail.UnitPriceBuy = qoutationDetailView.UnitPrice;
                     qoutationDetail.VATBuy = qoutationDetailView.VAT;
+                    qoutationDetail.Discount = qoutationDetailView.Discount;
                     qoutationDetailManageService.Update(qoutationDetail);
                     sumPrice += qoutationDetail.ProductQuantity * (qoutationDetail.UnitPriceBuy
                         + (decimal)((double)qoutationDetail.UnitPriceBuy * qoutationDetail.VATBuy));
                 }
                 qoutation.TotalPriceBuy = (double)sumPrice;
                 qoutationManageService.Update(qoutation);
-                var qoutationEvent = qoutationEventManageService.AccountantFilledPriceBuy(GetCurrentStaffId(), qoutation.Id);
+                QoutationEvent qoutationEvent = qoutationEventManageService.AccountantFilledPriceBuy(GetCurrentStaffId(), qoutation.Id);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
 
                 await AddNotification(new Framework.InputModels.HomePage.NotificationInput()
                 {
@@ -191,9 +193,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -225,15 +227,15 @@ namespace WebFramework.Controllers.QoutationManagement
             }
             try
             {
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 qoutation.QoutationStatusId = QoutationStatusIdHelper.AccountantRejectSellPrice;
 
                 qoutationManageService.Update(qoutation);
-                var qoutationEvent = qoutationEventManageService.AccountantRejectPriceBuy(GetCurrentStaffId(), qoutation.Id);
+                QoutationEvent qoutationEvent = qoutationEventManageService.AccountantRejectPriceBuy(GetCurrentStaffId(), qoutation.Id);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
 
 
                 await AddNotification(new Framework.InputModels.HomePage.NotificationInput()
@@ -252,9 +254,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -288,7 +290,7 @@ namespace WebFramework.Controllers.QoutationManagement
                 List<QoutationDetail> qoutationDetails = qoutationDetailService.GetQoutationDetailsByQoutationId(qoutation.Id);
 
                 // kiểm tra có đủ sản phẩm up lên hay không
-                foreach (var product in accountantFillPriceInput.Products)
+                foreach (ProductPrice product in accountantFillPriceInput.Products)
                 {
                     if (qoutationDetails.Find(x => x.ProductId == product.ProductId) == null || product.UnitPrice <= 0
                         || (product.VAT != 0 && product.VAT != 0.05 && product.VAT != 0.1))
@@ -302,13 +304,13 @@ namespace WebFramework.Controllers.QoutationManagement
                     return Json(new { result = "fail", content = "Sản phẩm không hợp lệ" });
                 }
                 // cập nhập Qoutation
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 qoutation.QoutationStatusId = QoutationStatusIdHelper.AccountantFilledPriceSell;
                 // cập nhật giá sản phẩm
                 decimal sumPrice = 0;
-                foreach (var qoutationDetail in qoutationDetails)
+                foreach (QoutationDetail qoutationDetail in qoutationDetails)
                 {
-                    var qoutationDetailView = accountantFillPriceInput
+                    ProductPrice qoutationDetailView = accountantFillPriceInput
                                                 .Products
                                                 .Where(x => x.ProductId == qoutationDetail.ProductId)
                                                 .SingleOrDefault();
@@ -320,13 +322,14 @@ namespace WebFramework.Controllers.QoutationManagement
 
                     qoutationDetail.UnitPriceSell = qoutationDetailView.UnitPrice;
                     qoutationDetail.VATSell = qoutationDetailView.VAT;
+                    qoutationDetail.Discount = qoutationDetailView.Discount;
                     qoutationDetailManageService.Update(qoutationDetail);
                     sumPrice += qoutationDetail.ProductQuantity * (qoutationDetail.UnitPriceSell
                         + (decimal)((double)qoutationDetail.UnitPriceSell * qoutationDetail.VATSell));
                 }
                 qoutation.TotalPriceSell = (double)sumPrice;
                 qoutationManageService.Update(qoutation);
-                var qoutationEvent = qoutationEventManageService.AccountantFilledPriceSell(GetCurrentStaffId(), qoutation.Id);
+                QoutationEvent qoutationEvent = qoutationEventManageService.AccountantFilledPriceSell(GetCurrentStaffId(), qoutation.Id);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
 
                 await AddNotification(new Framework.InputModels.HomePage.NotificationInput()
@@ -337,20 +340,22 @@ namespace WebFramework.Controllers.QoutationManagement
                     Permission = PermissionValue.AccountingManagerApprovePrice.ToString()
                 });
 
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
                 return Json(new
                 {
                     result = "success",
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (System.Exception ex)
             {
-                this.unitOfWork.RollbackTransaction();
+                string detail = ex.ToLogString(Environment.StackTrace);
+                unitOfWork.RollbackTransaction();
+                return Json(new { result = "fail", content = detail
+                });
             }
-            return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
 
         /// <summary>
@@ -384,7 +389,7 @@ namespace WebFramework.Controllers.QoutationManagement
             try
             {
                 // cập nhập Qoutation
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 QoutationEvent qoutationEvent = null;
                 if (accountingManagerApprovePriceInput.ApproveType == "approve")
                 {
@@ -398,9 +403,9 @@ namespace WebFramework.Controllers.QoutationManagement
                 }
                 qoutationManageService.Update(qoutation);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
 
                 if (accountingManagerApprovePriceInput.ApproveType == "approve")
                 {
@@ -430,9 +435,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -468,7 +473,7 @@ namespace WebFramework.Controllers.QoutationManagement
             try
             {
                 // cập nhập Qoutation
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 QoutationEvent qoutationEvent = null;
                 if (accountingManagerApprovePriceInput.ApproveType == "approve")
                 {
@@ -482,8 +487,8 @@ namespace WebFramework.Controllers.QoutationManagement
                 }
                 qoutationManageService.Update(qoutation);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.Commit();
+                unitOfWork.CommitTransaction();
 
                 if (accountingManagerApprovePriceInput.ApproveType == "approve")
                 {
@@ -513,9 +518,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -551,7 +556,7 @@ namespace WebFramework.Controllers.QoutationManagement
             try
             {
                 // cập nhập Qoutation
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 QoutationEvent qoutationEvent = null;
                 if (quotesPriceInput.QuotesType == "accept")
                 {
@@ -565,9 +570,9 @@ namespace WebFramework.Controllers.QoutationManagement
                 }
                 qoutationManageService.Update(qoutation);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
 
                 if (quotesPriceInput.QuotesType != "accept")
                 {
@@ -586,9 +591,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = "Thành công"
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -618,16 +623,15 @@ namespace WebFramework.Controllers.QoutationManagement
             }
             try
             {
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 qoutation.QoutationStatusId = QoutationStatusIdHelper.SalesManagerApproveSalesStaff;
                 qoutation.SalesAdminId = GetCurrentStaffId();
-                qoutation.ManagerId = qoutation.SalesAdminId;
                 qoutationManageService.Update(qoutation);
-                var qoutationEvent = qoutationEventManageService.SalesManagerApproveSalesStaff(GetCurrentStaffId(), qoutation.Id);
+                QoutationEvent qoutationEvent = qoutationEventManageService.SalesManagerApproveSalesStaff(GetCurrentStaffId(), qoutation.Id);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                this.unitOfWork.Commit();
+                unitOfWork.Commit();
                 //TODO thêm thông báo cho nhân viên kế toán
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.CommitTransaction();
 
                 await AddNotification(new Framework.InputModels.HomePage.NotificationInput()
                 {
@@ -643,9 +647,9 @@ namespace WebFramework.Controllers.QoutationManagement
                     content = qoutation
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }
@@ -671,24 +675,24 @@ namespace WebFramework.Controllers.QoutationManagement
             }
             try
             {
-                this.unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
                 Qoutation.QoutationStatusId = QoutationStatusIdHelper.Terminated;
                 Qoutation.RejectReason = rejectQoutationInput.Content;
                 qoutationManageService.Update(Qoutation);
-                var QoutationEvent = qoutationEventManageService.Terminated(GetCurrentStaffId(), Qoutation.Id);
+                QoutationEvent QoutationEvent = qoutationEventManageService.Terminated(GetCurrentStaffId(), Qoutation.Id);
                 loggerService.AddWariningLogger(QoutationEvent.Note);
                 //TODO thêm thông báo cho nhân viên sales
-                this.unitOfWork.Commit();
-                this.unitOfWork.CommitTransaction();
+                unitOfWork.Commit();
+                unitOfWork.CommitTransaction();
                 return Json(new
                 {
                     result = "success",
                     content = Qoutation
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
             }
             return Json(new { result = "fail", content = "Báo giá không hợp lệ" });
         }

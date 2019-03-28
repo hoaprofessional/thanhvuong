@@ -39,6 +39,11 @@ namespace Framework.DTOs.PrintPdfDto
         /// Kích thước
         /// </summary>
         public String Size { get; set; }
+        public string Discount { get; set; }
+        /// <summary>
+        /// Chiết khấu
+        /// </summary>
+        public string ManageId { get; set; }
 
         public String SizeDisplay
         {

@@ -36,7 +36,7 @@ namespace WebFramework.Controllers.QoutationManagement
         IQoutationEventManageService qoutationEventManageService;
         IIdConfigurationService idConfigurationService;
         ILoggerService loggerService;
-        IUnitOfWork unitOfWork;
+        IUnitOfWork unitOfWork1;
         public CreateQoutationController(ILayoutService layoutService,
             ICreateQoutationIndexService createQoutationIndexService,
             IQoutationManageService qoutationManageService,
@@ -47,12 +47,12 @@ namespace WebFramework.Controllers.QoutationManagement
             IIdConfigurationService idConfigurationService,
             ILoggerService loggerService,
             IHubContext<NotificationHub> hubcontext,
-            IUnitOfWork unitOfWork) : base(layoutService, hubcontext)
+            IUnitOfWork unitOfWork1) : base(layoutService, hubcontext)
         {
             this.createQoutationIndexService = createQoutationIndexService;
             this.qoutationManageService = qoutationManageService;
             this.qoutationDetailManageService = qoutationDetailManageService;
-            this.unitOfWork = unitOfWork;
+            this.unitOfWork1 = unitOfWork1;
             this.clientManageService = clientManageService;
             this.qoutationEventManageService = qoutationEventManageService;
             this.productManageService = productManageService;
@@ -70,14 +70,14 @@ namespace WebFramework.Controllers.QoutationManagement
             }
             try
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork1.BeginTransaction();
                 Client client = createQoutationIndexService.GetClientByNameAddressPhoneNumber(createQoutationInput.Name, createQoutationInput.Address, createQoutationInput.PhoneNumber);
                 if (client == null)
                 {
                     client = new Client();
                     client.CopyFrom(createQoutationInput);
                     clientManageService.Add(client);
-                    unitOfWork.Commit();
+                    unitOfWork1.Commit();
                 }
                 var qoutation = new Qoutation();
                 qoutation.EstimatedInstallationTime = createQoutationInput.EstimatedInstallationTime;
@@ -92,7 +92,7 @@ namespace WebFramework.Controllers.QoutationManagement
                         <li>- Thanh toán 100 % báo giá trong vòng 7 ngày sau khi bàn giao nghiệm thu</li>
                         </ul>";
                 qoutation = qoutationManageService.Add(qoutation);
-                unitOfWork.Commit();
+                unitOfWork1.Commit();
 
                 var userId = layoutService.GetUserByUserName(qoutation.CreationUserName).Id;
                 var staff = layoutService.GetStaffByUserId(userId);
@@ -131,8 +131,8 @@ namespace WebFramework.Controllers.QoutationManagement
                 }
                 var qoutationEvent = qoutationEventManageService.AlreadyCreated(staff.Id, qoutation.Id);
                 loggerService.AddInfomationLogger(qoutationEvent.Note);
-                unitOfWork.Commit();
-                unitOfWork.CommitTransaction();
+                unitOfWork1.Commit();
+                unitOfWork1.CommitTransaction();
                 var permission = layoutService.GetPermissionNotification(qoutation.QoutationStatusId);
                 string contentNotification = String.Format("Đơn hàng {0} vừa được nhân viên {1} tạo", qoutation.Id, staff.Name);
                 await AddNotification(new NotificationInput()
@@ -146,12 +146,17 @@ namespace WebFramework.Controllers.QoutationManagement
 
             catch (Exception e)
             {
-                unitOfWork.RollbackTransaction();
-                unitOfWork.BeginTransaction();
-                loggerService.AddInfomationLogger(e.Message);
-                unitOfWork.Commit();
-                unitOfWork.CommitTransaction();
-                return Json(new { result = "fail", message = e.Message });
+                //unitOfWork1.RollbackTransaction();
+                //unitOfWork1.BeginTransaction();
+                //loggerService.AddInfomationLogger(e.Message);
+                //unitOfWork1.Commit();
+                //unitOfWork1.CommitTransaction();
+                string detail = e.ToLogString(Environment.StackTrace);
+                return Json(new
+                {
+                    result = "fail",
+                    content = detail
+                });
             }
             return Json(new { result = "success" });
 

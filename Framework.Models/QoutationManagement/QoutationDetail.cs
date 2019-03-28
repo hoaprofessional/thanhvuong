@@ -48,6 +48,11 @@ namespace Framework.Models.QoutationManagement
         public double TotalPriceSell { get; set; }
 
         /// <summary>
+        /// chiết khấu
+        /// </summary>
+        public string Discount { get; set; }
+
+        /// <summary>
         /// QoutationId: khóa ngoại bảng báo giá
         /// </summary>
         [ForeignKey("QoutationId")]
@@ -57,6 +62,7 @@ namespace Framework.Models.QoutationManagement
         /// </summary>
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
+
 
 
 

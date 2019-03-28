@@ -35,11 +35,11 @@ namespace Framework.Repositories.Utils
 
         private void AddLogger(string content, string logType)
         {
-            Logger logger = new Logger();
-            logger.Content = content;
-            logger.LogType = logType;
-            this.Add(logger);
-            dataContext.SaveChanges();
+            //Logger logger = new Logger();
+            //logger.Content = content;
+            //logger.LogType = logType;
+            //this.Add(logger);
+            //dataContext.SaveChanges();
         }
 
         public void AddInfomationLogger(string content)
